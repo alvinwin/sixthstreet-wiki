@@ -3,7 +3,11 @@ import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
 
 const port = Number(process.env.PORT || 4173);
-const types = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8" };
+const types = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".webp": "image/webp"
+};
 
 createServer((request, response) => {
   const requested = request.url === "/" ? "/index.html" : request.url;

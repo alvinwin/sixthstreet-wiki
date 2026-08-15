@@ -1,18 +1,15 @@
 # Sixth Street
 
-Sixth Street is the entry point for two compact Zenless Zone Zero endgame briefs:
+This repository is the navigation-first `sixthstreet.wiki` homepage for
+compact Zenless Zone Zero notes. Its current live destinations are:
 
 - [Deadly Assault](https://alvinwin.github.io/zzz-deadly-assault/)
 - [Shiyu Defense](https://alvinwin.github.io/zzz-shiyu-defense/)
 
-This repository owns navigation only. Each mode keeps its own data, update process, and source checks.
+Future shelves are kept visible and marked `Coming next`. Briefs use source
+labels to explain what was checked, when it was checked, and which cycle or
+game version the note covers.
 
-## Local checks
-
-```sh
-npm install
-npx playwright install chromium
-npm run check
-```
-
-The build warns above 16 KiB raw and fails above 24 KiB raw or 10 KiB compressed.
+The homepage is static HTML and CSS with no framework. Local commands already
+defined in `package.json` include `npm run build`, `npm run check:budget`,
+`npm run serve`, `npm run test:e2e`, and `npm run check`.
