@@ -1,0 +1,16 @@
+{
+  "name": "sixthstreet.wiki",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check:budget": "node scripts/check-budget.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test:e2e": "playwright test",
+    "check": "npm run build && npm run check:budget && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}
