@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 const destinations = [
-  ["Deadly Assault", "https://alvinwin.github.io/zzz-deadly-assault/"],
-  ["Shiyu Defense", "https://alvinwin.github.io/zzz-shiyu-defense/"]
+  ["Deadly Assault", "https://da.sixthstreet.wiki/"],
+  ["Shiyu Defense", "https://sd.sixthstreet.wiki/"]
 ];
 
 test("offers both independent briefs", async ({ page }) => {

@@ -3,8 +3,8 @@
 This repository is the navigation-first `sixthstreet.wiki` homepage for
 compact Zenless Zone Zero notes. Its current live destinations are:
 
-- [Deadly Assault](https://alvinwin.github.io/zzz-deadly-assault/)
-- [Shiyu Defense](https://alvinwin.github.io/zzz-shiyu-defense/)
+- [Deadly Assault](https://da.sixthstreet.wiki/)
+- [Shiyu Defense](https://sd.sixthstreet.wiki/)
 
 Future shelves are kept visible and marked `Coming next`. The Systems shelf
 links to a generated, source-backed Attribute Anomaly reference and its related
