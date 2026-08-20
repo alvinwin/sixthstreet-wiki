@@ -1,5 +1,7 @@
 # sixth street image workflow
 
+Sixth Street copy must use actual Zenless Zone Zero / New Eridu vocabulary and preserve previously accepted homepage voice. Do not invent game-like mechanics or verbs for flavor; in particular, do not describe Deadly Assault or Shiyu Defense as queueing or use “queue” as their call to action.
+
 For iterative hero-image work in this repository:
 
 1. Consult the current official OpenAI image-generation guidance before the first edit in a working sequence.
