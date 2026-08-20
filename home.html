@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sixth Street Wiki: clear, source-aware field notes for Zenless Zone Zero.">
+    <title>Sixth Street Wiki</title>
+    <link rel="stylesheet" href="./home.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-bar">
+        <a class="brand" href="#top" aria-label="Sixth Street Wiki home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span class="brand-name">sixthstreet</span><span class="brand-suffix">.wiki</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a href="#shelf">Explore</a>
+          <a href="#operations">Guides</a>
+          <a href="#sources">Sources</a>
+        </nav>
+
+        <a class="nav-search" href="#search" aria-label="Search field notes">
+          <span aria-hidden="true">&#x2315;</span> Search
+        </a>
+
+        <details class="mobile-nav">
+          <summary aria-label="Open navigation">
+            <span class="mobile-nav__label">Menu</span>
+            <span class="mobile-nav__icon" aria-hidden="true"><i></i><i></i></span>
+          </summary>
+          <nav aria-label="Mobile navigation">
+            <a href="#shelf">Explore</a>
+            <a href="#operations">Guides</a>
+            <a href="#sources">Sources</a>
+            <a href="#search">Search</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero__inner">
+          <div class="hero__copy">
+            <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span> Field notes for New Eridu</p>
+            <h1 id="hero-title">Begin with the need.</h1>
+            <p class="hero__lede">A clear, source-aware place to build a team, learn a system, and find your way back to the next good fight.</p>
+            <form class="hero-search" id="search" role="search" aria-label="Search field notes">
+              <label for="hero-search-input" class="sr-only">Search guides and notes</label>
+              <input class="hero-search__input" id="hero-search-input" type="search" placeholder="Find a guide, agent, or system&hellip;" autocomplete="off">
+              <button class="hero-search__button" type="submit">Search <span aria-hidden="true">&rarr;</span></button>
+            </form>
+            <p class="hero__note">Fan-made community wiki <span aria-hidden="true">&middot;</span> Source-dated reference notes.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="ticker" role="status" aria-label="Current status">
+        <div class="ticker__inner">
+          <span class="ticker__item"><span class="ticker__dot ticker__dot--pending" aria-hidden="true"></span> DA: Awaiting source</span>
+          <span class="ticker__sep" aria-hidden="true">&#x2726;</span>
+          <span class="ticker__item"><span class="ticker__dot ticker__dot--live" aria-hidden="true"></span> SD: 3.1 Phase 1 &middot; Aug 7&ndash;21</span>
+          <span class="ticker__sep" aria-hidden="true">&#x2726;</span>
+          <a class="ticker__link" href="#sources">What this means <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+
+      <section class="shelf" id="shelf" aria-labelledby="shelf-title">
+        <div class="section-wrap">
+          <div class="shelf__heading">
+            <p class="section-kicker">Start where you are</p>
+            <h2 id="shelf-title">Begin with the need.</h2>
+          </div>
+          <div class="shelf-grid">
+            <a class="shelf-card shelf-card--peach" href="#systems">
+              <small>For the big picture</small>
+              <h3>Learn the systems</h3>
+              <p>Combat, progression, and the rules that change what you do next.</p>
+              <b>Open systems guide <span aria-hidden="true">&rarr;</span></b>
+            </a>
+            <a class="shelf-card shelf-card--mint" href="#teams">
+              <small>For your team</small>
+              <h3>Build a team</h3>
+              <p>Agents, roles, and team ideas written without spreadsheet speak.</p>
+              <b>Open team notes <span aria-hidden="true">&rarr;</span></b>
+            </a>
+            <a class="shelf-card shelf-card--butter" href="#library">
+              <small>For a quick answer</small>
+              <h3>Find a guide</h3>
+              <p>Short, useful paths through the parts that matter to you today.</p>
+              <b>Browse the library <span aria-hidden="true">&rarr;</span></b>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="operations" id="operations" aria-labelledby="ops-title">
+        <div class="section-wrap">
+          <div class="ops__heading">
+            <div>
+              <p class="section-kicker">Current operations</p>
+              <h2 id="ops-title">Two places to test your favorite team.</h2>
+            </div>
+            <p class="ops__intro">They ask for different preparation. Pick the one on your schedule.</p>
+          </div>
+          <div class="ops-grid">
+            <article class="ops-card ops-card--assault" id="deadly-assault">
+              <div class="ops-card__topline">
+                <span class="ops-stamp" aria-hidden="true">DA</span>
+                <span class="ops-card__kind">Combat score challenge</span>
+              </div>
+              <h3>Deadly Assault</h3>
+              <p>Boss-focused planning, score priorities, and team roles for pushing the run you already have.</p>
+              <a class="card-link" href="https://da.sixthstreet.wiki/">Open Deadly Assault <span aria-hidden="true">&rarr;</span></a>
+            </article>
+            <article class="ops-card ops-card--defense" id="shiyu-defense">
+              <div class="ops-card__topline">
+                <span class="ops-stamp" aria-hidden="true">SD</span>
+                <span class="ops-card__kind">Stage-by-stage combat</span>
+              </div>
+              <h3>Shiyu Defense</h3>
+              <p>Stage notes, squad ideas, and archived enemy references without guessing at the current rotation.</p>
+              <a class="card-link" href="https://sd.sixthstreet.wiki/">Open Shiyu Defense <span aria-hidden="true">&rarr;</span></a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources" id="sources" aria-labelledby="source-title">
+        <div class="source-panel">
+          <p class="section-kicker section-kicker--light">Source desk</p>
+          <h2 id="source-title">Freshness is shown, not implied.</h2>
+          <p>Guides distinguish official information, observed behavior, and community interpretation. This preview intentionally does not state a live rotation or current schedule.</p>
+        </div>
+        <dl class="source-defs">
+          <div>
+            <dt>Official source</dt>
+            <dd>Linked to the original published material.</dd>
+          </div>
+          <div>
+            <dt>Review state</dt>
+            <dd>Shown when a guide is checked against its cited source.</dd>
+          </div>
+          <div>
+            <dt>Rotation data</dt>
+            <dd>Not treated as current without a dated official reference.</dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer__inner">
+        <div>
+          <a class="brand brand--footer" href="#top" aria-label="Back to Sixth Street home">
+            <span class="brand-mark brand-mark--footer" aria-hidden="true">S</span>
+            <span class="brand-name">sixthstreet</span><span class="brand-suffix brand-suffix--footer">.wiki</span>
+          </a>
+          <p class="footer__tagline">Take the useful note with you.</p>
+        </div>
+        <p class="footer__disclaimer">Fan-made community utility. Zenless Zone Zero is a trademark of HoYoverse. Not affiliated with or endorsed by HoYoverse.</p>
+      </div>
+    </footer>
+  </body>
+</html>

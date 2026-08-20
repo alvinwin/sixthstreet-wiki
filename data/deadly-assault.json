@@ -1,0 +1,86 @@
+{
+  "version": "3.1",
+  "phaseName": "Phase 2",
+  "window": {
+    "start": "2026-08-14T00:00:00.000Z",
+    "end": "2026-08-28T00:00:00.000Z"
+  },
+  "checkedAt": "2026-08-15T02:52:48.616Z",
+  "lastRefreshed": "2026-08-15",
+  "status": "live",
+  "hasAdversity": true,
+  "modes": ["Trial Mode", "Adversity Mode"],
+  "buffs": [
+    {
+      "id": "69000066",
+      "name": "United Strength",
+      "description": "With 2/3 Anomaly Agents, squad Anomaly Proficiency increases by 30/70 and Attribute Anomaly DMG by 10%/25%. Inflicting an Attribute Anomaly also reduces enemy All-Attribute RES by 15% for 10s."
+    },
+    {
+      "id": "69000068",
+      "name": "Frost Reins",
+      "description": "Attack Agents gain 25% ATK. Basic, EX Special, or Chain Attack hits ignore 30% Ice and Ether RES. Hitting a Stunned enemy increases its Stun DMG Multiplier by 40% for 5s."
+    },
+    {
+      "id": "69000055",
+      "name": "Breakthrough",
+      "description": "Rupture Agents gain 15% Sheer DMG and reduce Miasma Shield 30% faster. In Ether Veil, Ether DMG increases by 25%; hits also raise the enemy's Stun DMG Multiplier by 25% for 10s."
+    }
+  ],
+  "encounters": [
+    {
+      "id": "31300",
+      "name": "Girtablullu: Stagnant Aberrant",
+      "category": "standard",
+      "specialty": "Anomaly",
+      "mechanic": "Apply Attribute Anomalies to add Blight Marks. Each mark lasts 30 seconds and increases Attribute Anomaly DMG taken by 8%.",
+      "mechanicReview": "reviewed",
+      "weaknesses": [],
+      "resistances": []
+    },
+    {
+      "id": "24300",
+      "name": "Ye Shiyuan the Thrall",
+      "category": "standard",
+      "specialty": "Stun",
+      "mechanic": "The Thrall gains Contract and Self-Sacrifice when changing turns with Sobek. Stun the Thrall to increase CRIT DMG taken by 50%.",
+      "mechanicReview": "reviewed",
+      "weaknesses": ["Ice", "Physical"],
+      "resistances": ["Electric"]
+    },
+    {
+      "id": "20300",
+      "name": "Miasma Priest",
+      "category": "standard",
+      "specialty": "Rupture",
+      "mechanic": "Each phase change raises Anomaly Buildup RES by 10% and CRIT DMG taken by 30%. Break the Miasmic Shield to remove the stacks.",
+      "mechanicReview": "reviewed",
+      "weaknesses": ["Ether"],
+      "resistances": ["Ice"]
+    },
+    {
+      "id": "28400",
+      "name": "Rewritten: Sanguine Sweeper",
+      "category": "adversity",
+      "specialty": "Attack",
+      "mechanic": "Trigger SHUTDOWN to reduce All-Attribute RES by 10%. Attack Agents then gain 20% ATK, 25% PEN Ratio, and 60% Ice and Ether CRIT DMG.",
+      "mechanicReview": "reviewed",
+      "weaknesses": ["Ice"],
+      "resistances": ["Physical"]
+    }
+  ],
+  "provenance": {
+    "sourceRepo": "alvinwin/zzz-deadly-assault",
+    "sourceSha": "49043968ee6b0adb48ead1efd38a17f6ed5bfb3b",
+    "upstreamRepo": "spiritfxxxx/buhflipexplode",
+    "upstreamSha": "620a7546b4d2934c58d55cdf7a435056576bb1fc",
+    "officialSources": [
+      {
+        "label": "Version 3.1 update",
+        "url": "https://www.hoyolab.com/article/46037106?reply=1",
+        "use": "Phase 2 encounter set and Trial/Adversity framing"
+      }
+    ],
+    "note": "Cycle data is normalized by the pinned producer from immutable upstream rotation, enemy, buff, and formula sources. Official HoYoLAB corroborates the Phase 2 encounter set."
+  }
+}

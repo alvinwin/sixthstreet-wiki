@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 2,
+  "terms": [
+    {
+      "slug": "attribute-anomaly",
+      "title": "Attribute Anomaly",
+      "summary": "The attribute-linked effect inflicted when an enemy's Anomaly Buildup reaches its limit.",
+      "steps": [
+        "Attacks and skills that inflict Anomaly Buildup fill the enemy's gauge for that Attribute.",
+        "When the gauge reaches its limit, the corresponding Attribute Anomaly is inflicted.",
+        "The result depends on the Attribute and on the Agents that contributed to the buildup."
+      ],
+      "whyItMatters": "Attribute Anomaly connects application speed, the resulting effect, reaction timing, and damage. Reading those as separate layers makes team and rotation advice much easier to evaluate.",
+      "distinctionTitle": "Buildup is not the trigger",
+      "distinction": "Anomaly Buildup fills the gauge. Attribute Anomaly is the effect inflicted when that gauge reaches its limit. Anomaly is also an Agent specialty, so the same word can refer to a role rather than the combat effect.",
+      "statNotes": [
+        { "name": "Anomaly Mastery (AM)", "description": "Scales how quickly an Agent applies Anomaly Buildup. At the base-stat level, more AM means more buildup from the same move." },
+        { "name": "Anomaly Proficiency (AP)", "description": "Scales Attribute Anomaly damage. It does not make the buildup gauge fill faster." }
+      ],
+      "related": [
+        { "slug": "disorder", "name": "Disorder", "description": "The reaction caused when a different eligible Attribute Anomaly replaces one already active." },
+        { "slug": "abloom", "name": "Abloom", "description": "A skill-triggered damage mechanic derived from an existing Attribute Anomaly." },
+        { "slug": "polarized-assault", "name": "Polarized Assault", "description": "Alice's named Assault mechanic, distinct from Polarity Disorder." },
+        { "slug": "polarity-disorder", "name": "Polarity Disorder", "description": "A special Disorder-like trigger that does not remove the active anomaly." }
+      ],
+      "hub": {
+        "gauge": {
+          "label": "Anomaly Buildup",
+          "caption": "Separate Attributes build separate gauges. The ring is a schematic of the in-game buildup indicator, not a screenshot."
+        },
+        "applicationRules": [
+          { "name": "ICD — internal cooldown", "status": "Historically tested", "description": "A normal Attribute Anomaly cannot be retriggered immediately. Controlled v1.1 testing measured a roughly three-second lock for the same anomaly; a current v3.1 regression test is still needed." },
+          { "name": "A full gauge may wait", "status": "Historically tested", "description": "In the v1.1 test, the capped gauge did not trigger automatically when the lock expired; a subsequent eligible buildup hit triggered it. Excess buildup while capped could be lost." },
+          { "name": "Resistance changes buildup", "status": "Current mechanic", "description": "Enemy Anomaly Buildup RES changes how much effective buildup a move contributes. Exact stacking, caps, and negative-RES behavior belong in a tested formula note." },
+          { "name": "Not generic stat diminishing returns", "status": "Clarification", "description": "AM and AP scale their base roles linearly. Practical saturation comes from ICD, resistance, and contributor mix—not an intrinsic AM or AP penalty. Older mechanics references reported repeated-trigger threshold growth, but its current v3.1 behavior and reset condition are unverified." }
+        ],
+        "effects": [
+          { "attribute": "Physical", "effect": "Assault · Flinch", "description": "Assault deals Physical damage and interrupts. Flinch increases the Daze the target takes for a period." },
+          { "attribute": "Fire", "effect": "Burn", "description": "Burn deals Fire damage over time. Application can interrupt enemies weak to Fire." },
+          { "attribute": "Ice", "effect": "Freeze · Shatter · Frostbite", "description": "Freeze stops action; ending it causes Shatter damage. Frostbite increases CRIT DMG taken for a period." },
+          { "attribute": "Electric", "effect": "Shock", "description": "Attacks against a Shocked target can cause additional Electric damage during the effect." },
+          { "attribute": "Ether", "effect": "Corruption", "description": "Attacks against a Corrupted target can cause additional Ether damage during the effect." },
+          { "attribute": "Wind", "effect": "Windswept", "description": "Windswept follows its own interaction path: eligible follow-up damage establishes Contamination, and Vortex replaces the usual Disorder route." }
+        ],
+        "interactions": [
+          { "slug": "disorder", "name": "Disorder", "kind": "Base system", "description": "A different eligible anomaly replaces the active one, dealing additional damage and accumulating Daze. Normal Disorder historically produced a wider ICD lock." },
+          { "name": "Vortex", "kind": "Attribute-specific", "description": "Windswept plus another anomaly triggers Vortex instead of normal Disorder. Its exact coefficients and retrigger timing remain open." },
+          { "slug": "abloom", "name": "Abloom", "kind": "Agent skill", "description": "Certain Agent skills use an existing Attribute Anomaly to deal additional Attribute Anomaly damage. The triggering skill defines the calculation." },
+          { "slug": "polarized-assault", "name": "Polarized Assault", "kind": "Agent skill", "description": "Alice's named Assault mechanic can ignore normal buildup progress. It is not a generic category called “Polarize.”" },
+          { "slug": "polarity-disorder", "name": "Polarity Disorder", "kind": "Agent skill", "description": "A distinct special trigger that deals extra damage without removing the active Attribute Anomaly." },
+          { "name": "Lumiflux · Refringe", "kind": "Attribute-specific", "description": "Lumiflux uses its own buildup and reaction rules. It should not be described as simply filling a normal gauge to inflict a Lumiflux Anomaly." }
+        ],
+        "formulaNotes": [
+          { "name": "Buildup map", "formula": "Base Buildup × (AM ÷ 100) × buildup bonuses × target RES modifier", "status": "Historical mechanics model — needs v3.1 regression" },
+          { "name": "Damage map", "formula": "Base Anomaly DMG × (AP × 0.01) × level and combat modifiers", "status": "Baseline model — special mechanics can replace it" },
+          { "name": "Contributor model", "formula": "The result reflects the Agents that contributed buildup and their respective shares.", "status": "Current wording, open calculation — needs instrumentation" }
+        ]
+      },
+      "checkedOn": "2026-08-20",
+      "freshnessNote": "Core lifecycle and named mechanics were checked for version 3.1. Exact ICD timing and formulas are labeled where the best reproducible evidence is historical or still needs live instrumentation.",
+      "sources": [
+        { "label": "Anomaly Buildup tutorial", "url": "https://zenless-zone-zero.fandom.com/wiki/Tutorial/Anomaly_Buildup", "publisher": "In-game text transcription", "sourceType": "Tutorial", "scope": "Gauge, trigger, and contributor wording" },
+        { "label": "Agents and basic mechanics beginner guide", "url": "https://www.hoyolab.com/article/30592563", "publisher": "HoYoLAB", "sourceType": "Article", "scope": "Anomaly specialty and attributes" },
+        { "label": "Attribute effects tutorial", "url": "https://zenless-zone-zero.fandom.com/wiki/Tutorial/Combat_Rules", "publisher": "In-game text transcription", "sourceType": "Tutorial", "scope": "Standard effects, Disorder, and Wind caveats" },
+        { "label": "Anomalies Guide companion research", "url": "https://www.hoyolab.com/article/32441068", "publisher": "ZZZ Academy · HoYoLAB", "sourceType": "Controlled testing", "scope": "ICD, full-gauge behavior, and Disorder lock" },
+        { "label": "Anomalies Guide video", "url": "https://www.youtube.com/watch?v=ixCkpYMvSOw", "publisher": "Дуда · ZZZ Academy", "sourceType": "Video", "scope": "Timestamped historical ICD demonstrations" },
+        { "label": "ZZZ formulas reference", "url": "https://github-wiki-see.page/m/Night-Sky-Studio/interknot-calculator/wiki/ZZZ-Formulas", "publisher": "Night-Sky Studio", "sourceType": "Mechanics reference", "scope": "Buildup and damage formula models" },
+        { "label": "Anomaly, Disorder, and Vortex formula research", "url": "https://docs.google.com/document/d/1ZPX8oqLAidbuHjHiq77h_nQa23PPWJXibls2ejbZqOM/edit?usp=sharing", "publisher": "Leifa", "sourceType": "Testing document", "scope": "Maintained anomaly formula and testing trail" },
+        { "label": "Version 3.1 update announcement", "url": "https://www.hoyolab.com/article/46037106", "publisher": "HoYoLAB", "sourceType": "Announcement", "scope": "Current version and Lumiflux classification" }
+      ]
+    },
+    {
+      "slug": "disorder",
+      "title": "Disorder",
+      "summary": "The reaction caused when a different eligible Attribute Anomaly replaces one already active on an enemy.",
+      "steps": ["Inflict an Attribute Anomaly on an enemy.", "Inflict a different eligible Attribute Anomaly while the first is active.", "The first anomaly is replaced and Disorder deals additional damage and accumulates Daze."],
+      "whyItMatters": "Disorder rewards teams that coordinate more than one Attribute, but its damage depends on the anomaly being removed and how much of its effect remained.",
+      "distinctionTitle": "Not every anomaly interaction is Disorder",
+      "distinction": "Wind uses Vortex when Windswept is involved. Polarity Disorder is a separate special mechanic and does not remove the active anomaly.",
+      "statNotes": [
+        { "name": "Removed anomaly", "description": "The outgoing anomaly determines the base Disorder behavior." },
+        { "name": "Time remaining", "description": "Standard damage-over-time anomalies generally produce more Disorder damage when replaced earlier. Extended-duration and special anomalies need separate testing." }
+      ],
+      "related": [
+        { "slug": "attribute-anomaly", "name": "Attribute Anomaly", "description": "The buildup, trigger, and effect system that Disorder reacts to." },
+        { "slug": "polarity-disorder", "name": "Polarity Disorder", "description": "A special trigger that does not remove the active anomaly." }
+      ],
+      "checkedOn": "2026-08-20",
+      "freshnessNote": "The trigger rule is source-backed. Exact coefficient tables remain mechanics-reference material and should be version-tested before being treated as immutable.",
+      "sources": [
+        { "label": "Attribute effects tutorial", "url": "https://zenless-zone-zero.fandom.com/wiki/Tutorial/Combat_Rules", "publisher": "In-game text transcription", "sourceType": "Tutorial", "scope": "Disorder trigger, damage, and Daze wording" },
+        { "label": "Anomalies Guide companion research", "url": "https://www.hoyolab.com/article/32441068", "publisher": "ZZZ Academy · HoYoLAB", "sourceType": "Controlled testing", "scope": "Normal Disorder and wider ICD behavior" }
+      ]
+    },
+    {
+      "slug": "abloom",
+      "title": "Abloom",
+      "summary": "A named mechanic used by certain Agent skills to deal additional damage from an existing Attribute Anomaly.",
+      "steps": ["An Attribute Anomaly is active on the target.", "An Agent skill with an Abloom trigger meets its conditions.", "Abloom deals additional Attribute Anomaly damage using that skill's own calculation."],
+      "whyItMatters": "Abloom is a real shared label, but not a universal reaction with one fixed multiplier. Its trigger and scaling must be read from the Agent skill that produces it.",
+      "distinctionTitle": "A category, not a free reaction",
+      "distinction": "An ordinary Attribute Anomaly does not automatically cause Abloom. A compatible Agent skill has to trigger it, and different implementations can use different ratios.",
+      "statNotes": [
+        { "name": "Existing anomaly", "description": "Abloom derives damage from an Attribute Anomaly already present on the target." },
+        { "name": "Skill-defined scaling", "description": "The triggering Agent's skill defines the exact damage calculation." }
+      ],
+      "related": [{ "slug": "attribute-anomaly", "name": "Attribute Anomaly", "description": "The base system from which Abloom derives its damage." }],
+      "checkedOn": "2026-08-20",
+      "freshnessNote": "Official material supports Abloom as a named damage mechanic. Treat every exact ratio as kit-specific and version-sensitive.",
+      "sources": [
+        { "label": "Version 2.6 update announcement", "url": "https://www.hoyolab.com/article/43642066", "publisher": "HoYoLAB", "sourceType": "Announcement", "scope": "Aria triggering Abloom for additional Attribute Anomaly damage" },
+        { "label": "Version 2.8 update announcement", "url": "https://www.hoyolab.com/article/44936166", "publisher": "HoYoLAB", "sourceType": "Announcement", "scope": "Abloom DMG as a current named damage category" }
+      ]
+    },
+    {
+      "slug": "polarized-assault",
+      "title": "Polarized Assault",
+      "summary": "Alice's named Assault mechanic, which can deal Assault damage without following the normal buildup trigger.",
+      "steps": ["Alice meets the skill-specific conditions for Polarized Assault.", "The effect ignores normal Anomaly Buildup progress.", "It deals damage equivalent to regular Assault and can participate in Disorder interactions."],
+      "whyItMatters": "Polarized Assault is an exception to the normal fill-the-gauge trigger flow and should not be generalized to other Agents or treated as a system-wide “Polarize” category.",
+      "distinctionTitle": "Polarized is not Polarity",
+      "distinction": "Polarized Assault is Alice's mechanic. Polarity Disorder is a different special mechanic associated with other Agents and does not remove the active anomaly.",
+      "statNotes": [
+        { "name": "No normal buildup trigger", "description": "The skill can produce its Assault-equivalent effect without filling the Physical buildup gauge in the ordinary way." },
+        { "name": "Agent-specific rule", "description": "Its activation and scaling belong to Alice's kit, not the base Attribute Anomaly rules." }
+      ],
+      "related": [
+        { "slug": "attribute-anomaly", "name": "Attribute Anomaly", "description": "The normal gauge-and-trigger flow that Polarized Assault bypasses." },
+        { "slug": "polarity-disorder", "name": "Polarity Disorder", "description": "A separate special mechanic with a similar-looking name." }
+      ],
+      "checkedOn": "2026-08-20",
+      "freshnessNote": "The official release spelling is Polarized Assault. Do not preserve “Polarity Assault” as an alias without reproducing it in the current English client.",
+      "sources": [
+        { "label": "Version 2.1 update announcement", "url": "https://www.hoyolab.com/article/40015374", "publisher": "HoYoLAB", "sourceType": "Announcement", "scope": "Official name and high-level behavior" },
+        { "label": "Alice Core Skill listing", "url": "https://zenless-zone-zero.fandom.com/wiki/Core_Skill/List", "publisher": "Current game-data transcription", "sourceType": "Skill data", "scope": "Assault equivalence and interaction behavior" }
+      ]
+    },
+    {
+      "slug": "polarity-disorder",
+      "title": "Polarity Disorder",
+      "summary": "A special Disorder-like trigger that deals extra damage without removing the active Attribute Anomaly.",
+      "steps": ["An eligible Attribute Anomaly is active on the enemy.", "A compatible Agent skill triggers Polarity Disorder.", "It deals additional damage while leaving the active anomaly in place."],
+      "whyItMatters": "Because it does not replace the active anomaly, Polarity Disorder does not follow the same state transition as normal Disorder and must be modeled separately.",
+      "distinctionTitle": "It does not consume the active anomaly",
+      "distinction": "Normal Disorder replaces the first anomaly when another eligible one is inflicted. Polarity Disorder is skill-triggered and leaves the active anomaly in place.",
+      "statNotes": [
+        { "name": "Active anomaly retained", "description": "The target keeps the Attribute Anomaly that enabled the trigger." },
+        { "name": "Kit-defined damage", "description": "The compatible Agent's skill defines the exact scaling and conditions." }
+      ],
+      "related": [
+        { "slug": "disorder", "name": "Disorder", "description": "The normal reaction whose name this special mechanic modifies." },
+        { "slug": "polarized-assault", "name": "Polarized Assault", "description": "Alice's separate mechanic with a similar-looking name." }
+      ],
+      "checkedOn": "2026-08-20",
+      "freshnessNote": "Polarity Disorder is a skill-defined special mechanic. Agent availability, triggers, and ratios can change with kit and version updates.",
+      "sources": [
+        { "label": "Nangong version overview", "url": "https://www.hoyolab.com/article/44187951", "publisher": "HoYoLAB", "sourceType": "Article", "scope": "Official name and non-removal behavior" },
+        { "label": "Attribute Anomaly mechanics listing", "url": "https://zenless-zone-zero.fandom.com/wiki/Attribute_Anomaly", "publisher": "Current game-data transcription", "sourceType": "Mechanics reference", "scope": "Current special-trigger context" }
+      ]
+    }
+  ]
+}

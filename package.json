@@ -4,11 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:terms": "node scripts/build-terms.mjs",
+    "check:terms": "node scripts/build-terms.mjs --check",
+    "test": "node --test tests/*.test.mjs",
+    "check:data": "node scripts/check-data.mjs",
+    "check:da-boss-character-trends": "node --check src/validate-da-boss-character-trends.js && node --check scripts/import-da-boss-character-trends.mjs && node --check tests/validate-da-boss-character-trends.test.mjs && node --check tests/import-da-boss-character-trends.test.mjs && node src/validate-da-boss-character-trends.js data/da-boss-character-trends.json",
     "build": "node scripts/build.mjs",
     "check:budget": "node scripts/check-budget.mjs",
     "serve": "node scripts/serve.mjs",
     "test:e2e": "playwright test",
-    "check": "npm run build && npm run check:budget && npm run test:e2e"
+    "check": "npm run check:terms && npm test && npm run check:data && npm run check:da-boss-character-trends && node --check src/main.js && node --check src/render-da.js && node --check src/render-sd.js && node --check src/validate-da.js && npm run build && npm run check:budget && npm run test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

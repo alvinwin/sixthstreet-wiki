@@ -1,0 +1,617 @@
+{
+  "version": "3.1.1",
+  "phaseName": "3.1 Phase 1",
+  "window": {
+    "start": "2026-08-07",
+    "end": "2026-08-21"
+  },
+  "dazeMult": 100,
+  "anomMult": 100,
+  "buffs": [
+    {
+      "id": "62000070",
+      "name": "Turbulent Resonance",
+      "description": "If there are 2/3 Agents with the Anomaly specialty in the squad, Attribute Anomaly DMG dealt by Agents increases by 10%/60%, and the whole squad initially gains 500/1500 Decibels upon entering combat."
+    },
+    {
+      "id": "62000067",
+      "name": "Final Concerto",
+      "description": "Agent's Ultimate and Chain Attack DMG increase by 40%. When Chain Attack hits an enemy, the enemy's Stun DMG Multiplier increases by 20% and Daze Recovery Speed slows down by 15% for 15s. Repeated triggers reset the duration."
+    },
+    {
+      "id": "62000071",
+      "name": "Rime and Thunder Breach",
+      "description": "Agent Ice DMG and Electric DMG increase by 30%. After an Agent with Attack specialty uses an EX Special Attack, their CRIT DMG increases by 30% for 20s. Repeated triggers reset the duration."
+    }
+  ],
+  "stages": [
+    {
+      "id": 1,
+      "sides": [
+        {
+          "label": "A",
+          "hpMult": 175,
+          "elementMult": {
+            "Physical": 0.8,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.0,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Physical",
+            "Electric"
+          ],
+          "resistance": [],
+          "waves": [
+            [
+              {
+                "name": "Fossor",
+                "id": "12000",
+                "count": 3,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Armored Hati",
+                "id": "10102",
+                "count": 1,
+                "type": "boss"
+              }
+            ],
+            [
+              {
+                "name": "Fossor",
+                "id": "12000",
+                "count": 2,
+                "type": "mob"
+              },
+              {
+                "name": "Sordidus",
+                "id": "12002",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Farbauti",
+                "id": "10110",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "hpMult": 175,
+          "elementMult": {
+            "Physical": 1.2,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.0,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Electric"
+          ],
+          "resistance": [
+            "Physical"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Ionized: Cyrtoidea",
+                "id": "10020",
+                "count": 2,
+                "type": "boss"
+              },
+              {
+                "name": "Ionized: Nassellaria",
+                "id": "10021",
+                "count": 2,
+                "type": "boss"
+              }
+            ],
+            [
+              {
+                "name": "Ionized: Farbauti",
+                "id": "10123",
+                "count": 1,
+                "type": "boss"
+              }
+            ],
+            [
+              {
+                "name": "Ionized: Dullahan",
+                "id": "10122",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "sides": [
+        {
+          "label": "A",
+          "hpMult": 175,
+          "elementMult": {
+            "Physical": 0.8,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.0,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Physical",
+            "Electric"
+          ],
+          "resistance": [],
+          "waves": [
+            [
+              {
+                "name": "Alpeca",
+                "id": "10002",
+                "count": 2,
+                "type": "mob"
+              },
+              {
+                "name": "Hoplitai",
+                "id": "10017",
+                "count": 2,
+                "type": "mob"
+              },
+              {
+                "name": "Mandrake",
+                "id": "10024",
+                "count": 1,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Hati",
+                "id": "10117",
+                "count": 1,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Metro Goblin",
+                "id": "10127",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Tyrfing",
+                "id": "10038",
+                "count": 3,
+                "type": "mob"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "hpMult": 175,
+          "elementMult": {
+            "Physical": 1.0,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.2,
+            "Anomaly": 0.8
+          },
+          "weakness": [
+            "Electric",
+            "Anomaly"
+          ],
+          "resistance": [
+            "Ether"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Airspace Patrolboo",
+                "id": "30000",
+                "count": 3,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "City Guardboo",
+                "id": "30100",
+                "count": 1,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Metamorphosed: City Guardboo",
+                "id": "30101",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Metamorphosed: Special Anti-Riotboo",
+                "id": "30006",
+                "count": 3,
+                "type": "mob"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "sides": [
+        {
+          "label": "A",
+          "hpMult": 350,
+          "elementMult": {
+            "Physical": 0.8,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.0,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Physical",
+            "Electric"
+          ],
+          "resistance": [],
+          "waves": [
+            [
+              {
+                "name": "Fossor",
+                "id": "12000",
+                "count": 3,
+                "type": "mob"
+              },
+              {
+                "name": "Sordidus",
+                "id": "12002",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Armored Hati",
+                "id": "10102",
+                "count": 1,
+                "type": "boss"
+              }
+            ],
+            [
+              {
+                "name": "Thanatos",
+                "id": "10132",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Goblin",
+                "id": "10113",
+                "count": 1,
+                "type": "mob"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "hpMult": 350,
+          "elementMult": {
+            "Physical": 1.2,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.2,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Electric"
+          ],
+          "resistance": [
+            "Physical",
+            "Ether"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Ionized: Cyrtoidea",
+                "id": "10020",
+                "count": 2,
+                "type": "mob"
+              },
+              {
+                "name": "Ionized: Nassellaria",
+                "id": "10021",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Miasmic: Frenzied Maniac",
+                "id": "23101",
+                "count": 1,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Ionized: Thanatos",
+                "id": "10124",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Ionized: Dullahan",
+                "id": "10122",
+                "count": 1,
+                "type": "mob"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "sides": [
+        {
+          "label": "A",
+          "hpMult": 350,
+          "elementMult": {
+            "Physical": 0.8,
+            "Fire": 1.0,
+            "Ice": 1.0,
+            "Electric": 0.8,
+            "Ether": 1.0,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Physical",
+            "Electric"
+          ],
+          "resistance": [],
+          "waves": [
+            [
+              {
+                "name": "Hati",
+                "id": "10117",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Notorious: Armored Hati",
+                "id": "10212",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "hpMult": 250,
+          "elementMult": {
+            "Physical": 1.2,
+            "Fire": 1.0,
+            "Ice": 0.8,
+            "Electric": 1.0,
+            "Ether": 1.0,
+            "Anomaly": 0.8
+          },
+          "weakness": [
+            "Ice",
+            "Anomaly"
+          ],
+          "resistance": [
+            "Physical"
+          ],
+          "waves": [
+            [
+              {
+                "name": "City Guardboo",
+                "id": "30100",
+                "count": 2,
+                "type": "boss"
+              }
+            ],
+            [
+              {
+                "name": "Metamorphosed: Scorpse",
+                "id": "30202",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "sides": [
+        {
+          "label": "A",
+          "hpMult": 500,
+          "elementMult": {
+            "Physical": 1.0,
+            "Fire": 1.2,
+            "Ice": 1.0,
+            "Electric": 1.0,
+            "Ether": 0.8,
+            "Anomaly": 0.8
+          },
+          "weakness": [
+            "Ether",
+            "Anomaly"
+          ],
+          "resistance": [
+            "Fire"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Special Anti-Riotboo",
+                "id": "30005",
+                "count": 3,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "City Guardboo",
+                "id": "30100",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Airspace Patrolboo",
+                "id": "30000",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Metamorphosed: Avarus",
+                "id": "30201",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "hpMult": 360,
+          "elementMult": {
+            "Physical": 1.2,
+            "Fire": 0.8,
+            "Ice": 0.8,
+            "Electric": 1.0,
+            "Ether": 1.2,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Fire",
+            "Ice"
+          ],
+          "resistance": [
+            "Physical",
+            "Ether"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Miasmic Trooper: Shieldguard",
+                "id": "22001",
+                "count": 3,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Doppelganger: Pulchra",
+                "id": "12105",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Miasmic Trooper: Cannoneer",
+                "id": "22000",
+                "count": 2,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Doppelganger: Starlight: Billy",
+                "id": "30204",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        },
+        {
+          "label": "C",
+          "hpMult": 620,
+          "elementMult": {
+            "Physical": 1.0,
+            "Fire": 1.2,
+            "Ice": 0.8,
+            "Electric": 1.2,
+            "Ether": 0.8,
+            "Anomaly": 1.0
+          },
+          "weakness": [
+            "Ice",
+            "Ether"
+          ],
+          "resistance": [
+            "Fire",
+            "Electric"
+          ],
+          "waves": [
+            [
+              {
+                "name": "Lightfoot Rover MK II",
+                "id": "10126",
+                "count": 1,
+                "type": "mob"
+              },
+              {
+                "name": "Miasmic Trooper: Cannoneer",
+                "id": "22000",
+                "count": 2,
+                "type": "mob"
+              },
+              {
+                "name": "Miasmic Trooper: Shieldguard",
+                "id": "22001",
+                "count": 3,
+                "type": "mob"
+              }
+            ],
+            [
+              {
+                "name": "Sacrifice: Heretic Jester",
+                "id": "21200",
+                "count": 1,
+                "type": "boss"
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "lastRefreshed": "2026-08-14",
+  "provenance": {
+    "sourceRepo": "spiritfxxxx/buhflipexplode",
+    "sourceSha": "620a7546b4d2934c58d55cdf7a435056576bb1fc",
+    "license": "GPL-3.0",
+    "note": "Community-maintained data. HP and combat values are calculated/estimated, not official."
+  }
+}
