@@ -13,7 +13,7 @@ test("publishes the integrated field brief", async ({ page }) => {
 
   await page.goto("/");
   await expect(page).toHaveTitle(/Sixth Street/);
-  await expect(page.getByRole("heading", { level: 1, name: /Find the useful note before the next run/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Know the fight before you queue/i })).toBeVisible();
   await expect(page.locator("#deadly-assault").getByRole("heading", { level: 2, name: "Deadly Assault" })).toBeVisible();
   await expect(page.locator("#shiyu-defense").getByRole("heading", { level: 2, name: "Shiyu Defense" })).toBeVisible();
   await expect(page.locator("#da-content")).not.toBeEmpty();
