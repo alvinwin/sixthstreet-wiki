@@ -1,139 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sixth Street Wiki — ZZZ Endgame Brief</title>
-  <meta name="description" content="A fast, decision-first reference for current Zenless Zone Zero endgame rotations.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-  <link rel="stylesheet" href="./home.css">
-  <link rel="stylesheet" href="./brief.css">
-</head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="sixthstreet.wiki keeps practical notes on New Eridu systems, teams, guides, and combat modes.">
+    <title>Sixth Street — useful notes for New Eridu</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to the library</a>
 
-  <header class="site-header">
-    <div class="header-bar">
-      <a class="brand" href="#main-content" aria-label="Sixth Street Wiki home">
-        <span class="brand-mark" aria-hidden="true">S</span>
-        <span class="brand-name">sixthstreet</span><span class="brand-suffix">.wiki</span>
-      </a>
-
-      <nav class="primary-nav" aria-label="Primary navigation">
-        <a href="#deadly-assault">Deadly Assault</a>
-        <a href="#shiyu-defense">Shiyu Defense</a>
-        <a href="terms/attribute-anomaly/">Read Attribute Anomaly <span aria-hidden="true">→</span></a>
-      </nav>
-
-      <a class="nav-search" href="./home.html" aria-label="Return to the Sixth Street homepage">
-        <span aria-hidden="true">&#x2190;</span> Home
-      </a>
-
-      <details class="mobile-nav">
-        <summary aria-label="Open navigation">
-          <span class="mobile-nav__label">Menu</span>
-          <span class="mobile-nav__icon" aria-hidden="true"><i></i><i></i></span>
-        </summary>
-        <nav aria-label="Mobile navigation">
-          <a href="#deadly-assault">Deadly Assault</a>
-          <a href="#shiyu-defense">Shiyu Defense</a>
-          <a href="terms/attribute-anomaly/">Read Attribute Anomaly <span aria-hidden="true">→</span></a>
-        </nav>
-      </details>
-    </div>
-  </header>
-
-  <main id="main-content">
-    <section class="hero hero--brief" aria-labelledby="brief-title">
-      <div class="hero__inner">
-        <div class="hero__copy">
-          <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span> Current operations</p>
-          <h1 id="brief-title">Know the fight before you queue.</h1>
-          <p class="hero__lede">A fast, source-dated field brief for Deadly Assault and Shiyu Defense.</p>
-          <div class="brief-jump" aria-label="Jump to a mode">
-            <a href="#deadly-assault">Deadly Assault <span aria-hidden="true">&darr;</span></a>
-            <a href="#shiyu-defense">Shiyu Defense <span aria-hidden="true">&darr;</span></a>
-          </div>
-          <p class="hero__note">Use the quick read first <span aria-hidden="true">&middot;</span> Open wave details only when needed.</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="ticker" role="status" aria-label="Data status">
-      <div class="ticker__inner">
-        <span id="da-ticker" class="ticker__item"><span class="ticker__dot ticker__dot--pending" aria-hidden="true"></span> DA: checking source</span>
-        <span class="ticker__sep" aria-hidden="true">&#x2726;</span>
-        <span id="sd-ticker" class="ticker__item"><span class="ticker__dot ticker__dot--pending" aria-hidden="true"></span> SD: checking source</span>
-        <span class="ticker__sep" aria-hidden="true">&#x2726;</span>
-        <a class="ticker__link" href="#provenance">Check the sources <span aria-hidden="true">&rarr;</span></a>
-      </div>
-    </div>
-
-    <section id="deadly-assault" class="mode-section mode-section--da">
-      <div class="section-wrap">
-        <div class="mode-heading">
-          <div class="mode-entry mode-entry--da">
-            <div class="mode-entry__topline">
-              <span class="mode-stamp" aria-hidden="true">DA</span>
-              <span class="mode-entry__kind">Combat score challenge</span>
-            </div>
-            <span class="mode-entry__ghost" aria-hidden="true">A</span>
-            <h2>Deadly Assault</h2>
-            <p class="section-intro">Check the current encounters and run priorities before committing your roster.</p>
-          </div>
-          <p class="mode-heading__note">Boss-focused planning, score priorities, and mechanics translated into a call you can make before the run. <a class="mode-heading__link" href="https://da.sixthstreet.wiki/">Open the full Deadly Assault brief <span aria-hidden="true">&rarr;</span></a></p>
-        </div>
-        <div id="da-content" class="section-body"></div>
-        <section id="da-boss-trends" class="da-trends" aria-labelledby="da-trends-title">
-          <div class="da-trends__heading">
-            <div>
-              <span class="kicker">Observed record</span>
-              <h3 id="da-trends-title">Character appearance across bosses</h3>
-            </div>
-            <p class="da-trends__boundary">A descriptive four-boss shelf from observed clears, not a tier list or team advice.</p>
-          </div>
-          <div id="da-trends" class="da-trends__content" aria-live="polite">
-            <div class="data-status da-trends__loading" role="status">Loading observed character trends&hellip;</div>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <section id="shiyu-defense" class="mode-section mode-section--sd">
-      <div class="section-wrap">
-        <div class="mode-heading">
-          <div class="mode-entry mode-entry--sd">
-            <div class="mode-entry__topline">
-              <span class="mode-stamp" aria-hidden="true">SD</span>
-              <span class="mode-entry__kind">Stage-by-stage combat</span>
-            </div>
-            <span class="mode-entry__ghost" aria-hidden="true">S</span>
-            <h2>Shiyu Defense</h2>
-            <p class="section-intro">Pick sides at a glance, then open the wave details you need.</p>
-          </div>
-          <p class="mode-heading__note">Stage notes, side matchups, and wave references arranged for the decision you need right now. <a class="mode-heading__link" href="https://sd.sixthstreet.wiki/">Open the full Shiyu Defense brief <span aria-hidden="true">&rarr;</span></a></p>
-        </div>
-        <div id="sd-content" class="section-body"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer__inner">
-      <div class="footer__brand-block">
-        <a class="brand brand--footer" href="#main-content" aria-label="Back to Sixth Street Wiki">
-          <span class="brand-mark brand-mark--footer" aria-hidden="true">S</span>
-          <span class="brand-name">sixthstreet</span><span class="brand-suffix brand-suffix--footer">.wiki</span>
+    <header class="site-header">
+      <div class="shell masthead">
+        <a class="brand" href="#top" aria-label="sixthstreet.wiki home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>sixthstreet.wiki</span>
         </a>
-        <p class="footer__tagline">Begin with the need.</p>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a href="#explore">Explore</a>
+          <a href="#operations">Modes</a>
+          <a href="#sources">Sources</a>
+        </nav>
       </div>
-      <div class="footer__details">
-        <div id="provenance"></div>
-        <p class="disclaimer">This is a fan-made community utility. Zenless Zone Zero is a trademark of HoYoverse. Not affiliated with or endorsed by HoYoverse.</p>
-      </div>
-    </div>
-  </footer>
+    </header>
 
-  <script type="module" src="./src/main.js"></script>
-</body>
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-art" aria-hidden="true"></div>
+        <div class="shell hero-content">
+          <p class="eyebrow">The neighborhood desk for Sixth Street</p>
+          <h1 id="hero-title">Find the useful note<br>before the next run.</h1>
+          <p class="hero-copy">Clear notes on systems, teams, guides, and active modes—filed with a source and date so you can tell what still applies.</p>
+          <div class="search-preview" role="status">
+            <span>Search systems, teams, guides…</span>
+            <strong>Coming later</strong>
+          </div>
+          <p class="hero-note">Neighborhood notes, filed between the rentals and record bins.</p>
+        </div>
+      </section>
+
+      <aside class="resource-ticker" aria-label="Sixth Street notice board">
+        <div class="shell ticker-inner">
+          <div class="ticker-heading">
+            <span class="ticker-dot" aria-hidden="true"></span>
+            <strong>New on the counter</strong>
+            <span class="ticker-caption">Two briefs ready</span>
+          </div>
+          <ul class="ticker-items" role="list">
+            <li><span>Deadly Assault</span><b>Available below</b></li>
+            <li><span>Shiyu Defense</span><b>Available below</b></li>
+            <li><span>Team notes</span><b>Coming next</b></li>
+          </ul>
+        </div>
+      </aside>
+
+      <section class="shelf-section section shell" id="explore" aria-labelledby="shelf-title">
+        <div class="section-heading">
+          <p class="eyebrow">From the shelves</p>
+          <h2 id="shelf-title">Systems, teams, and field guides.</h2>
+          <p>Start with how the game works, what fits together, or the job in front of you.</p>
+        </div>
+        <div class="shelf-grid">
+          <a class="shelf-card peach" href="terms/attribute-anomaly/">
+            <span class="card-index">01 / Systems</span>
+            <h3>Learn the systems</h3>
+            <p>Stats, upgrades, currencies, and the rules that shape a run.</p>
+            <span class="card-action">Read Attribute Anomaly <span aria-hidden="true">→</span></span>
+          </a>
+          <article class="shelf-card mint">
+            <span class="card-index">02 / Teams</span>
+            <h3>Build a team</h3>
+            <p>Roles, synergies, and checks to make before you spend resources.</p>
+            <span class="card-action">Coming next</span>
+          </article>
+          <article class="shelf-card butter">
+            <span class="card-index">03 / Guides</span>
+            <h3>Find a guide</h3>
+            <p>Step-by-step notes for a specific fight, mode, or task.</p>
+            <span class="card-action">Coming next</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="operations" id="operations" aria-labelledby="operations-title">
+        <div class="shell section">
+          <div class="section-heading operations-heading">
+            <p class="eyebrow">On the board</p>
+            <h2 id="operations-title">Current operations.</h2>
+            <p>Deadly Assault and Shiyu Defense keep separate pages, dates, and source notes.</p>
+          </div>
+          <div class="operation-grid">
+            <a class="operation-card assault" href="https://da.sixthstreet.wiki/">
+              <span class="ghost-type" aria-hidden="true">DA</span>
+              <div class="operation-card-top">
+                <p class="operation-kicker">Combat record</p>
+                <span class="status status-waiting">Open brief</span>
+              </div>
+              <div class="operation-card-bottom">
+                <h3>Deadly Assault</h3>
+                <p>Bosses, weaknesses, buffs, and cycle changes in one compact combat brief.</p>
+                <dl class="operation-meta">
+                  <div><dt>Mode</dt><dd>Deadly Assault</dd></div>
+                  <div><dt>Destination</dt><dd>Live brief</dd></div>
+                </dl>
+                <span class="operation-card-action">Open Deadly Assault</span>
+              </div>
+            </a>
+            <a class="operation-card shiyu" href="https://sd.sixthstreet.wiki/">
+              <span class="ghost-type" aria-hidden="true">SD</span>
+              <div class="operation-card-top">
+                <p class="operation-kicker">Challenge record</p>
+                <span class="status status-current">Open brief</span>
+              </div>
+              <div class="operation-card-bottom">
+                <h3>Shiyu Defense</h3>
+                <p>A dedicated route to the Shiyu Defense brief and its active combat notes.</p>
+                <dl class="operation-meta">
+                  <div><dt>Mode</dt><dd>Shiyu Defense</dd></div>
+                  <div><dt>Destination</dt><dd>Live brief</dd></div>
+                </dl>
+                <span class="operation-card-action">Open Shiyu Defense</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources-section shell" id="sources" aria-labelledby="sources-title">
+        <div class="source-editorial">
+          <p class="eyebrow">Source label</p>
+          <h2 id="sources-title">Know what the brief covers.</h2>
+          <p>Each combat brief can show what was checked, when it was checked, and which cycle or game version it covers.</p>
+          <a href="#source-terms">Read the label <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="source-definitions" id="source-terms">
+          <dl>
+            <div>
+              <dt>Cycle dates</dt>
+              <dd>The dates shown on a brief mark the period it covers.</dd>
+            </div>
+            <div>
+              <dt>Checked on</dt>
+              <dd>The date when the brief was compared with its linked source.</dd>
+            </div>
+            <div>
+              <dt>Needs checking</dt>
+              <dd>The brief says when its source has not been confirmed yet.</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <p class="footer-line">Take the useful note with you.</p>
+        <p class="disclaimer">Fan-made reference site. Not affiliated with HoYoverse, Zenless Zone Zero, or their partners.</p>
+      </div>
+    </footer>
+  </body>
 </html>

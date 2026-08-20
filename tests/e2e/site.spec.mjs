@@ -5,63 +5,85 @@ const destinations = [
   ["Shiyu Defense", "https://sd.sixthstreet.wiki/"]
 ];
 
-test("publishes the integrated field brief", async ({ page }) => {
-  const errors = [];
-  page.on("console", (message) => {
-    if (message.type() === "error") errors.push(message.text());
-  });
-
+test("offers both independent briefs", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/Sixth Street/);
-  await expect(page.getByRole("heading", { level: 1, name: /Know the fight before you queue/i })).toBeVisible();
-  await expect(page.locator("#deadly-assault").getByRole("heading", { level: 2, name: "Deadly Assault" })).toBeVisible();
-  await expect(page.locator("#shiyu-defense").getByRole("heading", { level: 2, name: "Shiyu Defense" })).toBeVisible();
-  await expect(page.locator("#da-content")).not.toBeEmpty();
-  await expect(page.locator("#sd-content")).not.toBeEmpty();
-  await expect(page.locator("#da-ticker")).toContainText(/remaining/i);
-  await expect(page.locator("#sd-ticker")).toContainText(/remaining/i);
-  expect(errors).toEqual([]);
-});
+  await expect(page.locator('input[type="search"]:not(:disabled):not([aria-disabled="true"]), [role="searchbox"]:not(:disabled):not([aria-disabled="true"])')).toHaveCount(0);
 
-test("preserves direct access to both independent briefs", async ({ page }) => {
-  await page.goto("/");
   for (const [name, href] of destinations) {
-    await expect(page.getByRole("link", { name: new RegExp(`full ${name} brief`, "i") })).toHaveAttribute("href", href);
-  }
-
-  await page.goto("/home.html");
-  for (const [name, href] of destinations) {
-    await expect(page.getByRole("link", { name: new RegExp(`Open ${name}`, "i") })).toHaveAttribute("href", href);
+    const link = page.getByRole("link", { name: new RegExp(name, "i") });
+    await expect(link).toHaveAttribute("href", href);
+    await expect(link).not.toHaveAttribute("target");
   }
 });
 
 test("links to the generated Attribute Anomaly reference", async ({ page }) => {
   await page.goto("/");
-  const termLink = page.getByRole("link", { name: /Attribute Anomaly/i }).first();
+
+  const termLink = page.getByRole("link", { name: /Read Attribute Anomaly/i });
   await expect(termLink).toHaveAttribute("href", "terms/attribute-anomaly/");
   await termLink.click();
+
   await expect(page).toHaveURL(/\/terms\/attribute-anomaly\/$/);
   await expect(page.getByRole("heading", { level: 1, name: "Attribute Anomaly" })).toBeVisible();
+  await expect(page.getByText("Base system", { exact: true })).toBeVisible();
+  await expect(page.getByText("Attribute-specific", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Agent skill", { exact: true }).first()).toBeVisible();
 });
 
-test("keeps the complete brief usable at 360px", async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 800 });
+test("keeps the mobile surface compact and keyboard-visible", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
-  await expect(page.locator("#deadly-assault")).toBeVisible();
-  await expect(page.locator("#shiyu-defense")).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+
   await page.keyboard.press("Tab");
   await expect(page.locator(":focus-visible")).toBeVisible();
 });
 
-test("serves all responsive hero formats", async ({ page }) => {
-  for (const [asset, type] of [
-    ["/assets/hero.png", /^image\/png(?:;|$)/],
-    ["/assets/hero.webp", /^image\/webp(?:;|$)/],
-    ["/assets/hero-mobile.webp", /^image\/webp(?:;|$)/]
-  ]) {
+test("serves responsive hero assets as WebP", async ({ page }) => {
+  for (const asset of ["/assets/hero.webp", "/assets/hero-mobile.webp"]) {
     const response = await page.request.get(asset);
     expect(response.status()).toBe(200);
-    expect(response.headers()["content-type"]).toMatch(type);
+    expect(response.headers()["content-type"]).toMatch(/^image\/webp(?:;|$)/);
   }
+});
+
+test("keeps the notice board informational and ordered", async ({ page }) => {
+  await page.goto("/");
+
+  const ticker = page.locator("aside.resource-ticker");
+  const rows = ticker.locator(".ticker-items > li");
+  await expect(rows).toHaveCount(3);
+  await expect(rows.locator("a")).toHaveCount(0);
+
+  for (const [index, label] of ["Deadly Assault", "Shiyu Defense"].entries()) {
+    await expect(rows.nth(index)).toBeVisible();
+    await expect(rows.nth(index)).toHaveText(new RegExp(`^${label}\\s*Available below$`));
+  }
+});
+
+test("keeps the source label link anchored to its terms", async ({ page }) => {
+  await page.goto("/");
+
+  const sourcePanel = page.locator(".source-editorial");
+  await expect(sourcePanel.getByRole("link", { name: "Read the label" })).toHaveAttribute("href", "#source-terms");
+});
+
+test("loads only the mobile hero asset at narrow navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  const assetRequests = [];
+  page.on("request", (request) => {
+    if (request.resourceType() !== "image") return;
+    const pathname = new URL(request.url()).pathname;
+    if (pathname === "/assets/hero.webp" || pathname === "/assets/hero-mobile.webp") {
+      assetRequests.push(pathname);
+    }
+  });
+
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  expect(assetRequests).toContain("/assets/hero-mobile.webp");
+  expect(assetRequests).not.toContain("/assets/hero.webp");
 });

@@ -1,19 +1,12 @@
 import { gzipSync } from "node:zlib";
 import { readFile } from "node:fs/promises";
 
-const RAW_WARNING = 160 * 1024;
-const RAW_HARD_LIMIT = 192 * 1024;
-const GZIP_HARD_LIMIT = 64 * 1024;
-const HERO_RAW_HARD_LIMIT = 4 * 1024 * 1024;
-const shellFiles = [
-  "dist/index.html",
-  "dist/home.css",
-  "dist/brief.css",
-  "dist/src/main.js",
-  "dist/src/render-da.js",
-  "dist/src/render-sd.js"
-];
-const heroFiles = ["dist/assets/hero.png", "dist/assets/hero.webp", "dist/assets/hero-mobile.webp"];
+const RAW_WARNING = 16 * 1024;
+const RAW_HARD_LIMIT = 24 * 1024;
+const GZIP_HARD_LIMIT = 10 * 1024;
+const HERO_RAW_HARD_LIMIT = 300 * 1024;
+const shellFiles = ["dist/index.html", "dist/styles.css"];
+const heroFiles = ["dist/assets/hero.webp", "dist/assets/hero-mobile.webp"];
 
 async function readRequired(file, label) {
   try {
@@ -30,20 +23,20 @@ const gzipBytes = shellBuffers.reduce((sum, buffer) => sum + gzipSync(buffer).by
 const heroRawBytes = heroBuffers.reduce((sum, buffer) => sum + buffer.byteLength, 0);
 
 console.log(`site shell: ${rawBytes} B raw, ${gzipBytes} B gzip`);
-console.log(`hero assets: ${heroRawBytes} B raw`);
+console.log(`hero assets (hero.webp + hero-mobile.webp): ${heroRawBytes} B raw`);
 
 if (rawBytes > RAW_HARD_LIMIT) {
-  throw new Error(`site shell exceeds the 192 KiB raw limit by ${rawBytes - RAW_HARD_LIMIT} B`);
+  throw new Error(`site shell exceeds the 24 KiB raw limit by ${rawBytes - RAW_HARD_LIMIT} B`);
 }
 
 if (gzipBytes > GZIP_HARD_LIMIT) {
-  throw new Error(`site shell exceeds the 64 KiB gzip limit by ${gzipBytes - GZIP_HARD_LIMIT} B`);
+  throw new Error(`site shell exceeds the 10 KiB gzip limit by ${gzipBytes - GZIP_HARD_LIMIT} B`);
 }
 
 if (heroRawBytes > HERO_RAW_HARD_LIMIT) {
-  throw new Error(`hero assets exceed the 4 MiB raw limit by ${heroRawBytes - HERO_RAW_HARD_LIMIT} B`);
+  throw new Error(`hero assets exceed the 300 KiB raw limit by ${heroRawBytes - HERO_RAW_HARD_LIMIT} B`);
 }
 
 if (rawBytes > RAW_WARNING) {
-  console.warn(`warning: site shell is ${rawBytes - RAW_WARNING} B above the 160 KiB raw target`);
+  console.warn(`warning: site shell is ${rawBytes - RAW_WARNING} B above the 16 KiB raw target`);
 }
