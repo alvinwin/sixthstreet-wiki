@@ -12,6 +12,7 @@ Do not copy transient project status into this file.
 
 ## collaboration contract
 
+- Advance the current accepted goal through bounded, reversible, extensible increments. Prefer implementations that solve the present problem cleanly and can be revised cheaply at the next review gate. Continue routine in-scope work without seeking approval. Do not broaden scope, add speculative abstraction, or optimize for hypothetical future needs unless the current problem or review evidence requires it.
 - Continue safe in-scope work without asking Alvin to coordinate routine handoffs or enumerate defects the agent can find itself.
 - Treat settled product decisions as constraints, not invitations to generate alternatives. Reopen them only when new evidence creates a real conflict.
 - Keep implemented, verified, reviewed, merged, deployed, and live-verified as distinct states.
