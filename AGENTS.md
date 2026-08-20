@@ -1,5 +1,7 @@
 # sixth street image workflow
 
+Until Alvin explicitly restores Codex's taste authority for Sixth Street, Codex is execution-only for product-facing work and ChatGPT web owns the independent taste gate. Preserve the currently accepted candidate unless a concrete defect is proven. Do not invent or unilaterally implement headlines, slogans, labels, lore flavor, imagery, interaction patterns, or hierarchy changes. When a product-facing concern arises, provide evidence and at most one alternative to ChatGPT; implement only after Alvin, ChatGPT, and Codex have converged. Treat ChatGPT's accepted taste reviews as binding unless new evidence exposes a real problem. Routine engineering fixes may continue autonomously. “Know the fight before you queue” is the negative calibration example: superficially game-like language that is not native to how Deadly Assault or Shiyu Defense are discussed.
+
 Sixth Street copy must use actual Zenless Zone Zero / New Eridu vocabulary and preserve previously accepted homepage voice. Do not invent game-like mechanics or verbs for flavor; in particular, do not describe Deadly Assault or Shiyu Defense as queueing or use “queue” as their call to action.
 
 For iterative hero-image work in this repository:
