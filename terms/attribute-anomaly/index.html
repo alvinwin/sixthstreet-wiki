@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The attribute-linked effect inflicted when an enemy&#039;s Anomaly Buildup reaches its limit.">
+    <title>Attribute Anomaly — sixthstreet.wiki</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../terms.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#term-content">Skip to the term</a>
+    <header class="site-header">
+      <div class="shell masthead">
+        <a class="brand" href="../../" aria-label="sixthstreet.wiki home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>sixthstreet.wiki</span>
+        </a>
+        <nav class="primary-nav term-nav" aria-label="Term navigation">
+          <a href="#meaning">Definition</a>
+          <a href="#effects">Effects</a>
+          <a href="#application">Application</a>
+          <a href="#interactions">Interactions</a>
+          <a href="#sources">Sources</a>
+        </nav>
+      </div>
+    </header>
+    <main id="term-content">
+      <article class="term-page">
+        <header class="term-hero">
+          <div class="shell term-hero-grid">
+            <div>
+              <p class="eyebrow">Combat mechanic</p>
+              <h1>Attribute Anomaly</h1>
+              <p class="term-summary">The attribute-linked effect inflicted when an enemy&#039;s Anomaly Buildup reaches its limit.</p>
+              <p class="term-review-meta">
+                <span>8 linked sources checked</span>
+                <time datetime="2026-08-20">2026-08-20</time>
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="shell term-layout term-layout-hub">
+          <div class="term-main">
+            <section class="term-section" id="meaning" aria-labelledby="meaning-title">
+              <p class="section-number">Definition</p>
+              <h2 id="meaning-title">How it works</h2>
+              <div class="term-flow term-flow-with-meter">
+                <ol class="term-steps">
+                <li>Attacks and skills that inflict Anomaly Buildup fill the enemy&#039;s gauge for that Attribute.</li>
+              <li>When the gauge reaches its limit, the corresponding Attribute Anomaly is inflicted.</li>
+              <li>The result depends on the Attribute and on the Agents that contributed to the buildup.</li>
+                </ol>
+              <figure class="buildup-figure">
+                <div class="buildup-meter" role="img" aria-label="Schematic full Anomaly Buildup gauge">
+                  <span>100%</span>
+                </div>
+                <figcaption><strong>Anomaly Buildup</strong>Separate Attributes build separate gauges. The ring is a schematic of the in-game buildup indicator, not a screenshot.</figcaption>
+              </figure>
+              </div>
+            </section>
+
+
+            <section class="term-section" id="effects" aria-labelledby="effects-title">
+              <p class="section-number">Attribute effects</p>
+              <h2 id="effects-title">What the trigger inflicts</h2>
+              <p>These are the standard effect families. Special Attributes and individual kits can change the route or the calculation.</p>
+              <div class="effect-grid">
+                <article class="effect-card effect-physical">
+                  <p class="effect-attribute">Physical</p>
+                  <h3>Assault · Flinch</h3>
+                  <p>Assault deals Physical damage and interrupts. Flinch increases the Daze the target takes for a period.</p>
+                </article>
+                <article class="effect-card effect-fire">
+                  <p class="effect-attribute">Fire</p>
+                  <h3>Burn</h3>
+                  <p>Burn deals Fire damage over time. Application can interrupt enemies weak to Fire.</p>
+                </article>
+                <article class="effect-card effect-ice">
+                  <p class="effect-attribute">Ice</p>
+                  <h3>Freeze · Shatter · Frostbite</h3>
+                  <p>Freeze stops action; ending it causes Shatter damage. Frostbite increases CRIT DMG taken for a period.</p>
+                </article>
+                <article class="effect-card effect-electric">
+                  <p class="effect-attribute">Electric</p>
+                  <h3>Shock</h3>
+                  <p>Attacks against a Shocked target can cause additional Electric damage during the effect.</p>
+                </article>
+                <article class="effect-card effect-ether">
+                  <p class="effect-attribute">Ether</p>
+                  <h3>Corruption</h3>
+                  <p>Attacks against a Corrupted target can cause additional Ether damage during the effect.</p>
+                </article>
+                <article class="effect-card effect-wind">
+                  <p class="effect-attribute">Wind</p>
+                  <h3>Windswept</h3>
+                  <p>Windswept follows its own interaction path: eligible follow-up damage establishes Contamination, and Vortex replaces the usual Disorder route.</p>
+                </article>
+              </div>
+            </section>
+
+            <section class="term-section" id="application" aria-labelledby="application-title">
+              <p class="section-number">Application rules</p>
+              <h2 id="application-title">Why a full gauge may not fire</h2>
+              <p>“Diminishing returns” mixes several different limits. Keep the cooldown, resistance, contributor mix, and repeat-trigger research separate.</p>
+              <div class="rule-grid">
+                <article class="rule-card">
+                  <p class="card-status">Historically tested</p>
+                  <h3>ICD — internal cooldown</h3>
+                  <p>A normal Attribute Anomaly cannot be retriggered immediately. Controlled v1.1 testing measured a roughly three-second lock for the same anomaly; a current v3.1 regression test is still needed.</p>
+                </article>
+                <article class="rule-card">
+                  <p class="card-status">Historically tested</p>
+                  <h3>A full gauge may wait</h3>
+                  <p>In the v1.1 test, the capped gauge did not trigger automatically when the lock expired; a subsequent eligible buildup hit triggered it. Excess buildup while capped could be lost.</p>
+                </article>
+                <article class="rule-card">
+                  <p class="card-status">Current mechanic</p>
+                  <h3>Resistance changes buildup</h3>
+                  <p>Enemy Anomaly Buildup RES changes how much effective buildup a move contributes. Exact stacking, caps, and negative-RES behavior belong in a tested formula note.</p>
+                </article>
+                <article class="rule-card">
+                  <p class="card-status">Clarification</p>
+                  <h3>Not generic stat diminishing returns</h3>
+                  <p>AM and AP scale their base roles linearly. Practical saturation comes from ICD, resistance, and contributor mix—not an intrinsic AM or AP penalty. Older mechanics references reported repeated-trigger threshold growth, but its current v3.1 behavior and reset condition are unverified.</p>
+                </article>
+              </div>
+            </section>
+
+            <section class="term-section" id="interactions" aria-labelledby="interactions-title">
+              <p class="section-number">Reactions and exceptions</p>
+              <h2 id="interactions-title">What happens after the trigger</h2>
+              <p>Base reactions, special Attributes, and Agent mechanics are related—but they are not interchangeable layers of the system.</p>
+              <div class="interaction-grid">
+                <a class="interaction-card" href="../disorder/">
+                  <p class="card-status">Base system</p>
+                  <h3>Disorder</h3>
+                  <p>A different eligible anomaly replaces the active one, dealing additional damage and accumulating Daze. Normal Disorder historically produced a wider ICD lock.</p>
+                  <span>Read term <span aria-hidden="true">→</span></span>
+                </a>
+                <article class="interaction-card">
+                  <p class="card-status">Attribute-specific</p>
+                  <h3>Vortex</h3>
+                  <p>Windswept plus another anomaly triggers Vortex instead of normal Disorder. Its exact coefficients and retrigger timing remain open.</p>
+                  <span>Dedicated page pending</span>
+                </article>
+                <a class="interaction-card" href="../abloom/">
+                  <p class="card-status">Agent skill</p>
+                  <h3>Abloom</h3>
+                  <p>Certain Agent skills use an existing Attribute Anomaly to deal additional Attribute Anomaly damage. The triggering skill defines the calculation.</p>
+                  <span>Read term <span aria-hidden="true">→</span></span>
+                </a>
+                <a class="interaction-card" href="../polarized-assault/">
+                  <p class="card-status">Agent skill</p>
+                  <h3>Polarized Assault</h3>
+                  <p>Alice&#039;s named Assault mechanic can ignore normal buildup progress. It is not a generic category called “Polarize.”</p>
+                  <span>Read term <span aria-hidden="true">→</span></span>
+                </a>
+                <a class="interaction-card" href="../polarity-disorder/">
+                  <p class="card-status">Agent skill</p>
+                  <h3>Polarity Disorder</h3>
+                  <p>A distinct special trigger that deals extra damage without removing the active Attribute Anomaly.</p>
+                  <span>Read term <span aria-hidden="true">→</span></span>
+                </a>
+                <article class="interaction-card">
+                  <p class="card-status">Attribute-specific</p>
+                  <h3>Lumiflux · Refringe</h3>
+                  <p>Lumiflux uses its own buildup and reaction rules. It should not be described as simply filling a normal gauge to inflict a Lumiflux Anomaly.</p>
+                  <span>Dedicated page pending</span>
+                </article>
+              </div>
+            </section>
+
+            <section class="term-section" id="formula" aria-labelledby="formula-title">
+              <p class="section-number">Calculation map</p>
+              <h2 id="formula-title">What the math is made from</h2>
+              <p>The formulas below are a map of the inputs, not a promise that every special mechanic uses the same coefficients.</p>
+              <div class="formula-grid">
+                <article class="formula-card">
+                  <p class="card-status formula-status">Historical mechanics model — needs v3.1 regression</p>
+                  <h3>Buildup map</h3>
+                  <p class="formula-line">Base Buildup × (AM ÷ 100) × buildup bonuses × target RES modifier</p>
+                </article>
+                <article class="formula-card">
+                  <p class="card-status formula-status">Baseline model — special mechanics can replace it</p>
+                  <h3>Damage map</h3>
+                  <p class="formula-line">Base Anomaly DMG × (AP × 0.01) × level and combat modifiers</p>
+                </article>
+                <article class="formula-card">
+                  <p class="card-status formula-status">Current wording, open calculation — needs instrumentation</p>
+                  <h3>Contributor model</h3>
+                  <p class="formula-line">The result reflects the Agents that contributed buildup and their respective shares.</p>
+                </article>
+              </div>
+            </section>
+
+
+            <section class="term-section" aria-labelledby="why-title">
+              <p class="section-number">Why it matters</p>
+              <h2 id="why-title">What it changes</h2>
+              <p>Attribute Anomaly connects application speed, the resulting effect, reaction timing, and damage. Reading those as separate layers makes team and rotation advice much easier to evaluate.</p>
+              <dl class="stat-notes">
+            <div>
+              <dt>Anomaly Mastery (AM)</dt>
+              <dd>Scales how quickly an Agent applies Anomaly Buildup. At the base-stat level, more AM means more buildup from the same move.</dd>
+            </div>
+            <div>
+              <dt>Anomaly Proficiency (AP)</dt>
+              <dd>Scales Attribute Anomaly damage. It does not make the buildup gauge fill faster.</dd>
+            </div>
+              </dl>
+            </section>
+
+            <section class="term-section distinction" aria-labelledby="distinction-title">
+              <p class="section-number">Common confusion</p>
+              <h2 id="distinction-title">Buildup is not the trigger</h2>
+              <p>Anomaly Buildup fills the gauge. Attribute Anomaly is the effect inflicted when that gauge reaches its limit. Anomaly is also an Agent specialty, so the same word can refer to a role rather than the combat effect.</p>
+            </section>
+
+            <section class="term-section" id="related" aria-labelledby="related-title">
+              <p class="section-number">Related terms</p>
+              <h2 id="related-title">Continue from here</h2>
+              <div class="related-grid">
+          <a class="related-card" href="../disorder/">
+            <h3>Disorder</h3>
+            <p>The reaction caused when a different eligible Attribute Anomaly replaces one already active.</p>
+            <span>Read term <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="related-card" href="../abloom/">
+            <h3>Abloom</h3>
+            <p>A skill-triggered damage mechanic derived from an existing Attribute Anomaly.</p>
+            <span>Read term <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="related-card" href="../polarized-assault/">
+            <h3>Polarized Assault</h3>
+            <p>Alice&#039;s named Assault mechanic, distinct from Polarity Disorder.</p>
+            <span>Read term <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="related-card" href="../polarity-disorder/">
+            <h3>Polarity Disorder</h3>
+            <p>A special Disorder-like trigger that does not remove the active anomaly.</p>
+            <span>Read term <span aria-hidden="true">→</span></span>
+          </a>
+              </div>
+            </section>
+
+          </div>
+
+          <aside class="term-source-panel" id="sources" aria-labelledby="sources-title">
+            <p class="eyebrow">Review boundary</p>
+            <h2 id="sources-title">Sources and scope</h2>
+            <p>Core lifecycle and named mechanics were checked for version 3.1. Exact ICD timing and formulas are labeled where the best reproducible evidence is historical or still needs live instrumentation.</p>
+            <ul>
+            <li>
+              <a href="https://zenless-zone-zero.fandom.com/wiki/Tutorial/Anomaly_Buildup">
+                <strong>Anomaly Buildup tutorial</strong>
+                <span>In-game text transcription · Tutorial</span>
+                <small>Gauge, trigger, and contributor wording</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.hoyolab.com/article/30592563">
+                <strong>Agents and basic mechanics beginner guide</strong>
+                <span>HoYoLAB · Article</span>
+                <small>Anomaly specialty and attributes</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://zenless-zone-zero.fandom.com/wiki/Tutorial/Combat_Rules">
+                <strong>Attribute effects tutorial</strong>
+                <span>In-game text transcription · Tutorial</span>
+                <small>Standard effects, Disorder, and Wind caveats</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.hoyolab.com/article/32441068">
+                <strong>Anomalies Guide companion research</strong>
+                <span>ZZZ Academy · HoYoLAB · Controlled testing</span>
+                <small>ICD, full-gauge behavior, and Disorder lock</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.youtube.com/watch?v=ixCkpYMvSOw">
+                <strong>Anomalies Guide video</strong>
+                <span>Дуда · ZZZ Academy · Video</span>
+                <small>Timestamped historical ICD demonstrations</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://github-wiki-see.page/m/Night-Sky-Studio/interknot-calculator/wiki/ZZZ-Formulas">
+                <strong>ZZZ formulas reference</strong>
+                <span>Night-Sky Studio · Mechanics reference</span>
+                <small>Buildup and damage formula models</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.google.com/document/d/1ZPX8oqLAidbuHjHiq77h_nQa23PPWJXibls2ejbZqOM/edit?usp=sharing">
+                <strong>Anomaly, Disorder, and Vortex formula research</strong>
+                <span>Leifa · Testing document</span>
+                <small>Maintained anomaly formula and testing trail</small>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.hoyolab.com/article/46037106">
+                <strong>Version 3.1 update announcement</strong>
+                <span>HoYoLAB · Announcement</span>
+                <small>Current version and Lumiflux classification</small>
+              </a>
+            </li>
+            </ul>
+          </aside>
+        </div>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <p class="term-footer-label">sixthstreet.wiki</p>
+        <p class="disclaimer">Fan-made reference site. Not affiliated with HoYoverse, Zenless Zone Zero, or their partners.</p>
+      </div>
+    </footer>
+  </body>
+</html>

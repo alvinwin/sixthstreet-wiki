@@ -17,6 +17,20 @@ test("offers both independent briefs", async ({ page }) => {
   }
 });
 
+test("links to the generated Attribute Anomaly reference", async ({ page }) => {
+  await page.goto("/");
+
+  const termLink = page.getByRole("link", { name: /Read Attribute Anomaly/i });
+  await expect(termLink).toHaveAttribute("href", "terms/attribute-anomaly/");
+  await termLink.click();
+
+  await expect(page).toHaveURL(/\/terms\/attribute-anomaly\/$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Attribute Anomaly" })).toBeVisible();
+  await expect(page.getByText("Base system", { exact: true })).toBeVisible();
+  await expect(page.getByText("Attribute-specific", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Agent skill", { exact: true }).first()).toBeVisible();
+});
+
 test("keeps the mobile surface compact and keyboard-visible", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");

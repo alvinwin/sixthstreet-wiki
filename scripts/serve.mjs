@@ -1,6 +1,6 @@
-import { createReadStream } from "node:fs";
+import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize } from "node:path";
+import { extname, resolve, sep } from "node:path";
 
 const port = Number(process.env.PORT || 4173);
 const types = {
@@ -9,15 +9,18 @@ const types = {
   ".webp": "image/webp"
 };
 
-createServer((request, response) => {
-  const requested = request.url === "/" ? "/index.html" : request.url;
-  const path = normalize(join("dist", requested));
-  if (!path.startsWith("dist/")) {
+const root = resolve("dist");
+
+createServer(async (request, response) => {
+  try {
+    const pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
+    let path = resolve(root, `.${pathname}`);
+    if (path !== root && !path.startsWith(`${root}${sep}`)) throw new Error("outside dist");
+    if ((await stat(path)).isDirectory()) path = resolve(path, "index.html");
+    const body = await readFile(path);
+    response.writeHead(200, { "Content-Type": types[extname(path)] || "application/octet-stream" });
+    response.end(body);
+  } catch {
     response.writeHead(404).end();
-    return;
   }
-  const stream = createReadStream(path);
-  stream.on("error", () => response.writeHead(404).end());
-  response.writeHead(200, { "Content-Type": types[extname(path)] || "application/octet-stream" });
-  stream.pipe(response);
 }).listen(port, "127.0.0.1", () => console.log(`serving http://127.0.0.1:${port}`));
