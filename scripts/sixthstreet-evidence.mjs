@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { homedir } from "node:os";
+import { isAbsolute, relative, resolve } from "node:path";
 import process from "node:process";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
@@ -10,8 +11,61 @@ function requiredSourceMap(snapshot) {
   return new Map(snapshot.projectDelivery.requiredSources.map(({ name, sha256 }) => [name, sha256]));
 }
 
-export function validateEvidence(snapshot, evidence) {
+function fileInside(directory, path) {
+  if (!existsSync(directory)) return null;
+  const candidate = isAbsolute(path) ? resolve(path) : resolve(directory, path);
+  if (!existsSync(candidate) || !statSync(candidate).isFile()) return null;
+  const realDirectory = realpathSync(directory);
+  const realCandidate = realpathSync(candidate);
+  const offset = relative(realDirectory, realCandidate);
+  if (!offset || offset.startsWith("..") || isAbsolute(offset)) return null;
+  return realCandidate;
+}
+
+function hasCodexContinuationSpan(token, sessionRoot) {
+  const match = token.match(/^codex-session (.+\.jsonl)#L(\d+)-L(\d+)$/);
+  if (!match) return false;
+  const path = fileInside(sessionRoot, match[1]);
+  if (!path) return false;
+
+  const lines = readFileSync(path, "utf8").trimEnd().split(/\r?\n/);
+  const start = Number(match[2]);
+  const end = Number(match[3]);
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end < start || end > lines.length) {
+    return false;
+  }
+
+  try {
+    const metadata = JSON.parse(lines[0]);
+    if (metadata.type !== "session_meta" || typeof metadata.payload?.id !== "string") return false;
+    const records = lines.slice(start - 1, end).map((line) => JSON.parse(line));
+    let openAssistantBoundary = false;
+    for (const record of records) {
+      if (record.type === "event_msg" && record.payload?.type === "user_message") {
+        openAssistantBoundary = false;
+      } else if (record.type === "event_msg" && record.payload?.type === "agent_message") {
+        openAssistantBoundary = true;
+      } else if (openAssistantBoundary && record.type === "response_item" && record.payload?.type === "custom_tool_call") {
+        return true;
+      }
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
+function hasChatGptExchange(token, exchangeRoot) {
+  const match = token.match(/^chatgpt-exchange (.+)$/);
+  if (!match) return false;
+  const path = fileInside(exchangeRoot, match[1]);
+  return Boolean(path && readFileSync(path, "utf8").trim());
+}
+
+export function validateEvidence(snapshot, evidence, options = {}) {
   const errors = [];
+  const codexSessionRoot = options.codexSessionRoot ?? resolve(homedir(), ".codex", "sessions");
+  const exchangeRoot = options.exchangeRoot ?? resolve(root, ".sixthstreet-state", "attempts");
   if (!evidence || typeof evidence !== "object" || Array.isArray(evidence)) {
     return { pass: false, errors: ["evidence must be an object"] };
   }
@@ -47,20 +101,17 @@ export function validateEvidence(snapshot, evidence) {
     const evidenceRef = typeof attempt.evidenceRef === "string" ? attempt.evidenceRef : "";
     const tokens = evidenceRef.split(";").map((token) => token.trim()).filter(Boolean);
     const hasChat = tokens.some((token) => /^https:\/\/chatgpt\.com\/(?:[^?#]+\/)?c\/[^/?#]+/.test(token));
-    const hasLocalReceipt = tokens.some((token) => {
-      if (!/^(?:\.sixthstreet-state|tests|scripts|state)\//.test(token)) return false;
-      const candidate = resolve(root, token);
-      return candidate.startsWith(`${root}/`) && existsSync(candidate);
-    });
+    const hasCodexSpan = tokens.some((token) => hasCodexContinuationSpan(token, codexSessionRoot));
+    const hasExchange = tokens.some((token) => hasChatGptExchange(token, exchangeRoot));
     const hasCurrentCommit = tokens.some((token) => token === `commit ${snapshot.sources.localGit.head}`);
     if (attempt.invariant === "A1" && evidenceRef !== project?.chatUrl) {
       errors.push(`attempt ${attempt.id} A1 evidence does not match the fresh Project activation chat`);
     }
-    if (attempt.invariant === "A2" && (!hasLocalReceipt || !hasCurrentCommit)) {
-      errors.push(`attempt ${attempt.id} A2 evidence is not bound to an existing receipt and current commit`);
+    if (attempt.invariant === "A2" && (!hasCodexSpan || !hasCurrentCommit)) {
+      errors.push(`attempt ${attempt.id} A2 evidence is not bound to a real Codex session span and current commit`);
     }
-    if (attempt.invariant === "B1" && !hasChat) {
-      errors.push(`attempt ${attempt.id} B1 evidence is not bound to a ChatGPT working exchange`);
+    if (attempt.invariant === "B1" && (!hasChat || !hasExchange)) {
+      errors.push(`attempt ${attempt.id} B1 evidence is not bound to a ChatGPT working exchange and exported content`);
     }
   }
 

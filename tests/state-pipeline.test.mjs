@@ -9,6 +9,21 @@ const root = resolve(new URL("..", import.meta.url).pathname);
 const stateScript = resolve(root, "scripts", "sixthstreet-state.py");
 const fixture = resolve(root, "tests", "fixtures", "sixthstreet-state-input.json");
 const fixtureEnv = { ...process.env, SIXTHSTREET_ALLOW_FIXTURE: "1" };
+const evidenceFixtureRoot = mkdtempSync(join(os.tmpdir(), "sixthstreet-evidence-test-"));
+writeFileSync(join(evidenceFixtureRoot, "session.jsonl"), [
+  { type: "session_meta", payload: { id: "session-1" } },
+  { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
+  { type: "response_item", payload: { type: "message" } },
+  { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
+].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
+writeFileSync(join(evidenceFixtureRoot, "interrupted-session.jsonl"), [
+  { type: "session_meta", payload: { id: "session-2" } },
+  { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
+  { type: "event_msg", payload: { type: "user_message", message: "Keep going." } },
+  { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
+].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
+writeFileSync(join(evidenceFixtureRoot, "exchange.txt"), "Codex and ChatGPT challenge a recovered owner decision.\n", "utf8");
+const validationOptions = { codexSessionRoot: evidenceFixtureRoot, exchangeRoot: evidenceFixtureRoot };
 
 test("keeps the product principles view generated from one JSON producer", () => {
   execFileSync("python3", [stateScript, "render", "--check"], { cwd: root });
@@ -100,6 +115,10 @@ test("builds three fresh-session phase prompts without invoking a model", () => 
   assert.match(prompts.reconcile, /An unmet terminal condition or required external authorization is\s+not by itself an authority conflict/);
   assert.match(prompts.challenge, /Try to disprove/);
   assert.match(prompts["terminal-audit"], /actual A1\/A2\/B1 terminal boundary/);
+  assert.match(prompts["terminal-audit"], /exact codex-session JSONL line span/);
+  assert.match(prompts["terminal-audit"], /compact receipt cannot prove continuation by itself/);
+  assert.match(prompts["terminal-audit"], /run-scoped chatgpt-exchange export/);
+  assert.match(prompts["terminal-audit"], /two peers agree without owner evidence/);
 });
 
 test("accepts exact machine-readable receipt references in phase evidence", async () => {
@@ -152,8 +171,8 @@ function validEvidence(packetRunId = "run-1") {
     },
     attempts: [
       { id: "a1", invariant: "A1", scenario: "activation", startingCondition: "stale input", observedBehavior: "reconciled", result: "pass", evidenceRef: activationChat },
-      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "tests/fixtures/sixthstreet-state-input.json; commit head-1" },
-      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "https://chatgpt.com/c/b1-exchange" }
+      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "codex-session session.jsonl#L2-L4; commit head-1" },
+      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "https://chatgpt.com/c/b1-exchange; chatgpt-exchange exchange.txt" }
     ],
     repositoryChecks: {
       status: "pass",
@@ -180,9 +199,9 @@ test("fails deterministic evidence validation when a receipt is missing or stale
   const snapshot = evidenceSnapshot();
   const evidence = validEvidence();
 
-  assert.equal(validateEvidence(snapshot, evidence).pass, true);
+  assert.equal(validateEvidence(snapshot, evidence, validationOptions).pass, true);
   evidence.repositoryChecks.workingTreeSha256 = "stale";
-  assert.deepEqual(validateEvidence(snapshot, evidence), {
+  assert.deepEqual(validateEvidence(snapshot, evidence, validationOptions), {
     pass: false,
     errors: ["repository-check working tree does not match current snapshot"]
   });
@@ -193,9 +212,9 @@ test("accepts a reread timestamp change only when the Project packet has the sam
   const snapshot = evidenceSnapshot("run-2");
   const evidence = validEvidence("run-1");
 
-  assert.equal(validateEvidence(snapshot, evidence).pass, true);
+  assert.equal(validateEvidence(snapshot, evidence, validationOptions).pass, true);
   evidence.projectActivation.workingTreeSha256 = "stale";
-  assert.deepEqual(validateEvidence(snapshot, evidence), {
+  assert.deepEqual(validateEvidence(snapshot, evidence, validationOptions), {
     pass: false,
     errors: ["Project activation local state does not match current snapshot"]
   });
@@ -207,38 +226,50 @@ test("rejects self-consistent but unbound terminal receipts", async () => {
 
   const exactRunStaleState = validEvidence();
   exactRunStaleState.projectActivation.localHead = "stale-head";
-  assert.ok(validateEvidence(snapshot, exactRunStaleState).errors.includes(
+  assert.ok(validateEvidence(snapshot, exactRunStaleState, validationOptions).errors.includes(
     "Project activation local state does not match current snapshot"
   ));
 
-  const fakeA2Receipt = validEvidence();
-  fakeA2Receipt.attempts[1].evidenceRef = ".sixthstreet-state/does-not-exist.json; commit head-1";
-  assert.ok(validateEvidence(snapshot, fakeA2Receipt).errors.includes(
-    "attempt a2 A2 evidence is not bound to an existing receipt and current commit"
+  const unrelatedA2File = validEvidence();
+  unrelatedA2File.attempts[1].evidenceRef = "tests/fixtures/sixthstreet-state-input.json; commit head-1";
+  assert.ok(validateEvidence(snapshot, unrelatedA2File, validationOptions).errors.includes(
+    "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
   ));
 
   const staleA2Commit = validEvidence();
-  staleA2Commit.attempts[1].evidenceRef = "tests/fixtures/sixthstreet-state-input.json; commit old-head";
-  assert.ok(validateEvidence(snapshot, staleA2Commit).errors.includes(
-    "attempt a2 A2 evidence is not bound to an existing receipt and current commit"
+  staleA2Commit.attempts[1].evidenceRef = "codex-session session.jsonl#L2-L4; commit old-head";
+  assert.ok(validateEvidence(snapshot, staleA2Commit, validationOptions).errors.includes(
+    "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
+  ));
+
+  const userRestartedA2 = validEvidence();
+  userRestartedA2.attempts[1].evidenceRef = "codex-session interrupted-session.jsonl#L2-L4; commit head-1";
+  assert.ok(validateEvidence(snapshot, userRestartedA2, validationOptions).errors.includes(
+    "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
+  ));
+
+  const urlOnlyB1 = validEvidence();
+  urlOnlyB1.attempts[2].evidenceRef = "https://chatgpt.com/c/b1-exchange";
+  assert.ok(validateEvidence(snapshot, urlOnlyB1, validationOptions).errors.includes(
+    "attempt b1 B1 evidence is not bound to a ChatGPT working exchange and exported content"
   ));
 
   const arbitrarySheetHashes = validEvidence();
   arbitrarySheetHashes.writebacks[0].items[0].expectedSha256 = "self-matching";
   arbitrarySheetHashes.writebacks[0].items[0].rereadSha256 = "self-matching";
-  assert.ok(validateEvidence(snapshot, arbitrarySheetHashes).errors.includes(
+  assert.ok(validateEvidence(snapshot, arbitrarySheetHashes, validationOptions).errors.includes(
     "Sheet write/reread mismatch: sheet:Sixthstreet Prep!D22"
   ));
 
   const missingSheetTarget = validEvidence();
   missingSheetTarget.writebacks[0].items = missingSheetTarget.writebacks[0].items.slice(1);
-  assert.ok(validateEvidence(snapshot, missingSheetTarget).errors.includes(
+  assert.ok(validateEvidence(snapshot, missingSheetTarget, validationOptions).errors.includes(
     "Sheet write/reread target missing: sheet:Sixthstreet Prep!D22"
   ));
 
   const staleGitHubReceipt = validEvidence();
   staleGitHubReceipt.writebacks[1].target = "alvinwin/imagination#25";
-  assert.ok(validateEvidence(snapshot, staleGitHubReceipt).errors.includes(
+  assert.ok(validateEvidence(snapshot, staleGitHubReceipt, validationOptions).errors.includes(
     "GitHub write/reread receipt does not match the live issue target and body"
   ));
 });

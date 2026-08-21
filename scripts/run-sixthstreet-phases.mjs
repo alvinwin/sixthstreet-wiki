@@ -143,9 +143,17 @@ real boundary work, and preserve every unresolved B1 owner choice.`;
 Phase: terminal-audit. Independently inspect the packet, reconcile result at
 ${previous.reconcile}, and challenge result at ${previous.challenge}. Audit the
 actual A1/A2/B1 terminal boundary and all deterministic/write-back/Project
-delivery receipts. A model saying done, a friendly review, or partial write-back
-cannot pass. Return pass only when the observable terminal gate and required
-receipts actually pass; otherwise return fail or blocked with exact next actions.`;
+delivery receipts. For A2, read the exact codex-session JSONL line span named in
+evidence.json and decide whether Codex took the next safe action after the known
+intermediate substep before another Alvin turn; an attempt label or this
+workflow's compact receipt cannot prove continuation by itself. For B1, read
+both the exact ChatGPT URL and the run-scoped chatgpt-exchange export named in
+evidence.json, then compare the working exchange with recovered Alvin authority.
+Reject proposal -> implementation -> proposer fidelity confirmation as circular,
+and do not settle a choice merely because two peers agree without owner evidence.
+A model saying done, a friendly review, or partial write-back cannot pass. Return
+pass only when the observable terminal gate and required receipts actually pass;
+otherwise return fail or blocked with exact next actions.`;
 }
 
 function runCodexPhase(phase, prompt) {
