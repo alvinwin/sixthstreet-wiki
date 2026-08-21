@@ -75,7 +75,7 @@ function hasPassingRepositoryCheckSpan(token, sessionRoot, currentHead) {
       item.type === "response_item" &&
       item.payload?.type === "custom_tool_call" &&
       item.payload?.name === "exec" &&
-      /cmd:\s*\\?"npm run check\\?"/.test(item.payload?.input ?? "")
+      /(?:cmd|["']cmd["'])\s*:\s*\\?["']npm run check\\?["']/.test(item.payload?.input ?? "")
     );
     if (!call?.payload?.call_id) return false;
     const output = items.find((item) =>

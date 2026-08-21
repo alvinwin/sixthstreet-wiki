@@ -14,7 +14,7 @@ writeFileSync(join(evidenceFixtureRoot, "session.jsonl"), [
   { type: "session_meta", payload: { id: "session-1", git: { commit_hash: "head-1" } } },
   { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
   { type: "response_item", payload: { type: "message" } },
-  { type: "response_item", payload: { type: "custom_tool_call", name: "exec", call_id: "check-1", input: "tools.exec_command({cmd:\"npm run check\"})" } },
+  { type: "response_item", payload: { type: "custom_tool_call", name: "exec", call_id: "check-1", input: "tools.exec_command({\"cmd\":\"npm run check\"})" } },
   { type: "response_item", payload: { type: "custom_tool_call_output", call_id: "check-1", output: [{ type: "input_text", text: "{\"exit_code\":0}" }] } }
 ].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
 writeFileSync(join(evidenceFixtureRoot, "stale-session.jsonl"), [
