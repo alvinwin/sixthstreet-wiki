@@ -118,6 +118,10 @@ put known later terminal work and receipts in nextActions or evidence. A pass
 must have an empty missingContext array. If any listed missing context blocks
 this phase, return blocked or fail instead of pass.
 
+Use residualOwnerDecisions only for owner choices required to complete the
+active task's terminal gate. Preserve consequential but parked choices in
+evidence and nextActions without classifying them as residual to this task.
+
 Use conflicts only for competing claims about the same fact. When current
 authoritative evidence proves a claim false, mark that conflict falsified, not
 unresolved. An unmet terminal condition or required external authorization is
@@ -137,7 +141,9 @@ missing, stale, or materially contradictory.`;
 Phase: challenge. Independently inspect the packet and the reconcile result at
 ${previous.reconcile}. Try to disprove the reconciled task model, surface product
 principles or continuity it missed, test whether a proposed mechanism is doing
-real boundary work, and preserve every unresolved B1 owner choice.`;
+real boundary work, and preserve every unresolved B1 owner choice in evidence
+or nextActions. Only choices required to complete the active task belong in
+residualOwnerDecisions.`;
   }
   return `${shared}
 Phase: terminal-audit. Independently inspect the packet, reconcile result at

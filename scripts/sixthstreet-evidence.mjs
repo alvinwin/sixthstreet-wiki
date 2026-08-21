@@ -49,6 +49,46 @@ function hasCodexContinuationSpan(token, sessionRoot, currentHead) {
   }
 }
 
+function hasPassingRepositoryCheckSpan(token, sessionRoot, currentHead) {
+  const match = token.match(/^codex-session (.+\.jsonl)#L(\d+)-L(\d+)$/);
+  if (!match) return false;
+  const path = fileInside(sessionRoot, match[1]);
+  if (!path) return false;
+
+  const lines = readFileSync(path, "utf8").trimEnd().split(/\r?\n/);
+  const start = Number(match[2]);
+  const end = Number(match[3]);
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end <= start || end > lines.length) {
+    return false;
+  }
+
+  try {
+    const metadata = JSON.parse(lines[0]);
+    if (
+      metadata.type !== "session_meta" ||
+      typeof metadata.payload?.id !== "string" ||
+      metadata.payload?.git?.commit_hash !== currentHead
+    ) return false;
+
+    const items = lines.slice(start - 1, end).map((line) => JSON.parse(line));
+    const call = items.find((item) =>
+      item.type === "response_item" &&
+      item.payload?.type === "custom_tool_call" &&
+      item.payload?.name === "exec" &&
+      /cmd:\s*\\?"npm run check\\?"/.test(item.payload?.input ?? "")
+    );
+    if (!call?.payload?.call_id) return false;
+    const output = items.find((item) =>
+      item.type === "response_item" &&
+      item.payload?.type === "custom_tool_call_output" &&
+      item.payload?.call_id === call.payload.call_id
+    );
+    return Boolean(output && /\\?"exit_code\\?":0/.test(JSON.stringify(output.payload.output)));
+  } catch {
+    return false;
+  }
+}
+
 function hasChatGptExchange(token, exchangeRoot) {
   const match = token.match(/^chatgpt-exchange (.+)$/);
   if (!match) return false;
@@ -115,6 +155,16 @@ export function validateEvidence(snapshot, evidence, options = {}) {
   if (checks?.localHead !== snapshot.sources.localGit.head) errors.push("repository-check head does not match current snapshot");
   if (checks?.workingTreeSha256 !== snapshot.sources.localGit.workingTreeSha256) {
     errors.push("repository-check working tree does not match current snapshot");
+  }
+  const checkTokens = typeof checks?.evidenceRef === "string"
+    ? checks.evidenceRef.split(";").map((token) => token.trim()).filter(Boolean)
+    : [];
+  const hasPassingCheck = checkTokens.some((token) =>
+    hasPassingRepositoryCheckSpan(token, codexSessionRoot, snapshot.sources.localGit.head)
+  );
+  const hasCheckCommit = checkTokens.some((token) => token === `commit ${snapshot.sources.localGit.head}`);
+  if (!hasPassingCheck || !hasCheckCommit) {
+    errors.push("repository-check evidence is not bound to a passing Codex session span and current commit");
   }
 
   const writebacks = Array.isArray(evidence.writebacks) ? evidence.writebacks : [];

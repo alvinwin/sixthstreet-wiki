@@ -14,7 +14,8 @@ writeFileSync(join(evidenceFixtureRoot, "session.jsonl"), [
   { type: "session_meta", payload: { id: "session-1", git: { commit_hash: "head-1" } } },
   { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
   { type: "response_item", payload: { type: "message" } },
-  { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
+  { type: "response_item", payload: { type: "custom_tool_call", name: "exec", call_id: "check-1", input: "tools.exec_command({cmd:\"npm run check\"})" } },
+  { type: "response_item", payload: { type: "custom_tool_call_output", call_id: "check-1", output: [{ type: "input_text", text: "{\"exit_code\":0}" }] } }
 ].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
 writeFileSync(join(evidenceFixtureRoot, "stale-session.jsonl"), [
   { type: "session_meta", payload: { id: "session-old", git: { commit_hash: "old-head" } } },
@@ -184,7 +185,8 @@ function validEvidence(packetRunId = "run-1") {
       status: "pass",
       command: "npm run check",
       localHead: "head-1",
-      workingTreeSha256: "tree-1"
+      workingTreeSha256: "tree-1",
+      evidenceRef: "codex-session session.jsonl#L4-L5; commit head-1"
     },
     writebacks: [
       {
@@ -211,6 +213,17 @@ test("fails deterministic evidence validation when a receipt is missing or stale
     pass: false,
     errors: ["repository-check working tree does not match current snapshot"]
   });
+});
+
+test("rejects a self-declared repository pass without an exact passing session span", async () => {
+  const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
+  const snapshot = evidenceSnapshot();
+  const evidence = validEvidence();
+  evidence.repositoryChecks.evidenceRef = "npm run check passed";
+
+  assert.ok(validateEvidence(snapshot, evidence, validationOptions).errors.includes(
+    "repository-check evidence is not bound to a passing Codex session span and current commit"
+  ));
 });
 
 test("accepts a reread timestamp change only when the Project packet has the same local state", async () => {
