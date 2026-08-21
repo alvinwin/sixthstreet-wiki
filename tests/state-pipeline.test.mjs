@@ -11,7 +11,13 @@ const fixture = resolve(root, "tests", "fixtures", "sixthstreet-state-input.json
 const fixtureEnv = { ...process.env, SIXTHSTREET_ALLOW_FIXTURE: "1" };
 const evidenceFixtureRoot = mkdtempSync(join(os.tmpdir(), "sixthstreet-evidence-test-"));
 writeFileSync(join(evidenceFixtureRoot, "session.jsonl"), [
-  { type: "session_meta", payload: { id: "session-1" } },
+  { type: "session_meta", payload: { id: "session-1", git: { commit_hash: "head-1" } } },
+  { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
+  { type: "response_item", payload: { type: "message" } },
+  { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
+].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
+writeFileSync(join(evidenceFixtureRoot, "stale-session.jsonl"), [
+  { type: "session_meta", payload: { id: "session-old", git: { commit_hash: "old-head" } } },
   { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
   { type: "response_item", payload: { type: "message" } },
   { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
@@ -239,6 +245,12 @@ test("rejects self-consistent but unbound terminal receipts", async () => {
   const staleA2Commit = validEvidence();
   staleA2Commit.attempts[1].evidenceRef = "codex-session session.jsonl#L2-L4; commit old-head";
   assert.ok(validateEvidence(snapshot, staleA2Commit, validationOptions).errors.includes(
+    "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
+  ));
+
+  const replayedA2Span = validEvidence();
+  replayedA2Span.attempts[1].evidenceRef = "codex-session stale-session.jsonl#L2-L4; commit head-1";
+  assert.ok(validateEvidence(snapshot, replayedA2Span, validationOptions).errors.includes(
     "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
   ));
 

@@ -22,7 +22,7 @@ function fileInside(directory, path) {
   return realCandidate;
 }
 
-function hasCodexContinuationSpan(token, sessionRoot) {
+function hasCodexContinuationSpan(token, sessionRoot, currentHead) {
   const match = token.match(/^codex-session (.+\.jsonl)#L(\d+)-L(\d+)$/);
   if (!match) return false;
   const path = fileInside(sessionRoot, match[1]);
@@ -37,7 +37,11 @@ function hasCodexContinuationSpan(token, sessionRoot) {
 
   try {
     const metadata = JSON.parse(lines[0]);
-    if (metadata.type !== "session_meta" || typeof metadata.payload?.id !== "string") return false;
+    if (
+      metadata.type !== "session_meta" ||
+      typeof metadata.payload?.id !== "string" ||
+      metadata.payload?.git?.commit_hash !== currentHead
+    ) return false;
     lines.slice(start - 1, end).forEach((line) => JSON.parse(line));
     return true;
   } catch {
@@ -91,7 +95,7 @@ export function validateEvidence(snapshot, evidence, options = {}) {
     const evidenceRef = typeof attempt.evidenceRef === "string" ? attempt.evidenceRef : "";
     const tokens = evidenceRef.split(";").map((token) => token.trim()).filter(Boolean);
     const hasChat = tokens.some((token) => /^https:\/\/chatgpt\.com\/(?:[^?#]+\/)?c\/[^/?#]+/.test(token));
-    const hasCodexSpan = tokens.some((token) => hasCodexContinuationSpan(token, codexSessionRoot));
+    const hasCodexSpan = tokens.some((token) => hasCodexContinuationSpan(token, codexSessionRoot, snapshot.sources.localGit.head));
     const hasExchange = tokens.some((token) => hasChatGptExchange(token, exchangeRoot));
     const hasCurrentCommit = tokens.some((token) => token === `commit ${snapshot.sources.localGit.head}`);
     if (attempt.invariant === "A1" && evidenceRef !== project?.chatUrl) {
