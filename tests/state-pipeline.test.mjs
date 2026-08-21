@@ -101,34 +101,64 @@ test("accepts exact machine-readable receipt references in phase evidence", asyn
   assert.doesNotThrow(() => validateResult(result, "reconcile"));
 });
 
-test("fails deterministic evidence validation when a receipt is missing or stale", async () => {
-  const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
-  const snapshot = {
-    runId: "run-1",
+function evidenceSnapshot(runId = "run-1") {
+  return {
+    runId,
     projectDelivery: { requiredSources: [{ name: "contract.md", sha256: "abc" }] },
-    sources: { localGit: { head: "head-1", workingTreeSha256: "tree-1" } }
+    sources: {
+      localGit: { head: "head-1", workingTreeSha256: "tree-1" },
+      sheet: {
+        cells: [
+          { ref: "sheet:Sixthstreet Prep!D22", sha256: "sheet-d22" },
+          { ref: "sheet:Sixthstreet Prep!H22", sha256: "sheet-h22" }
+        ]
+      },
+      github: { repo: "alvinwin/imagination", issue: 24, bodySha256: "github-body" }
+    }
   };
-  const evidence = {
+}
+
+function validEvidence(packetRunId = "run-1") {
+  const activationChat = "https://chatgpt.com/g/g-p-test/c/activation";
+  return {
     projectActivation: {
       status: "pass",
-      chatUrl: "https://chatgpt.com/c/test",
-      packetRunId: "run-1",
+      chatUrl: activationChat,
+      packetRunId,
       localHead: "head-1",
       workingTreeSha256: "tree-1",
       instructionsReadback: true,
       stableSources: [{ name: "contract.md", sha256: "abc" }]
     },
     attempts: [
-      { id: "a1", invariant: "A1", scenario: "activation", startingCondition: "stale input", observedBehavior: "reconciled", result: "pass", evidenceRef: "chat:a1" },
-      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "run:a2" },
-      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "chat:b1" }
+      { id: "a1", invariant: "A1", scenario: "activation", startingCondition: "stale input", observedBehavior: "reconciled", result: "pass", evidenceRef: activationChat },
+      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "tests/fixtures/sixthstreet-state-input.json; commit head-1" },
+      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "https://chatgpt.com/c/b1-exchange" }
     ],
-    repositoryChecks: { status: "pass", localHead: "head-1", workingTreeSha256: "tree-1" },
+    repositoryChecks: {
+      status: "pass",
+      command: "npm run check",
+      localHead: "head-1",
+      workingTreeSha256: "tree-1"
+    },
     writebacks: [
-      { surface: "sheet", status: "pass", expectedSha256: "s", rereadSha256: "s" },
-      { surface: "github", status: "pass", expectedSha256: "g", rereadSha256: "g" }
+      {
+        surface: "sheet",
+        status: "pass",
+        items: [
+          { ref: "sheet:Sixthstreet Prep!D22", expectedSha256: "sheet-d22", rereadSha256: "sheet-d22" },
+          { ref: "sheet:Sixthstreet Prep!H22", expectedSha256: "sheet-h22", rereadSha256: "sheet-h22" }
+        ]
+      },
+      { surface: "github", status: "pass", target: "alvinwin/imagination#24", expectedSha256: "github-body", rereadSha256: "github-body" }
     ]
   };
+}
+
+test("fails deterministic evidence validation when a receipt is missing or stale", async () => {
+  const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
+  const snapshot = evidenceSnapshot();
+  const evidence = validEvidence();
 
   assert.equal(validateEvidence(snapshot, evidence).pass, true);
   evidence.repositoryChecks.workingTreeSha256 = "stale";
@@ -140,37 +170,55 @@ test("fails deterministic evidence validation when a receipt is missing or stale
 
 test("accepts a reread timestamp change only when the Project packet has the same local state", async () => {
   const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
-  const snapshot = {
-    runId: "run-2",
-    projectDelivery: { requiredSources: [{ name: "contract.md", sha256: "abc" }] },
-    sources: { localGit: { head: "head-1", workingTreeSha256: "tree-1" } }
-  };
-  const evidence = {
-    projectActivation: {
-      status: "pass",
-      chatUrl: "https://chatgpt.com/c/test",
-      packetRunId: "run-1",
-      localHead: "head-1",
-      workingTreeSha256: "tree-1",
-      instructionsReadback: true,
-      stableSources: [{ name: "contract.md", sha256: "abc" }]
-    },
-    attempts: [
-      { id: "a1", invariant: "A1", scenario: "activation", startingCondition: "stale input", observedBehavior: "reconciled", result: "pass", evidenceRef: "chat:a1" },
-      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "run:a2" },
-      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "chat:b1" }
-    ],
-    repositoryChecks: { status: "pass", localHead: "head-1", workingTreeSha256: "tree-1" },
-    writebacks: [
-      { surface: "sheet", status: "pass", expectedSha256: "s", rereadSha256: "s" },
-      { surface: "github", status: "pass", expectedSha256: "g", rereadSha256: "g" }
-    ]
-  };
+  const snapshot = evidenceSnapshot("run-2");
+  const evidence = validEvidence("run-1");
 
   assert.equal(validateEvidence(snapshot, evidence).pass, true);
   evidence.projectActivation.workingTreeSha256 = "stale";
   assert.deepEqual(validateEvidence(snapshot, evidence), {
     pass: false,
-    errors: ["Project activation packet does not match the current local state"]
+    errors: ["Project activation local state does not match current snapshot"]
   });
+});
+
+test("rejects self-consistent but unbound terminal receipts", async () => {
+  const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
+  const snapshot = evidenceSnapshot();
+
+  const exactRunStaleState = validEvidence();
+  exactRunStaleState.projectActivation.localHead = "stale-head";
+  assert.ok(validateEvidence(snapshot, exactRunStaleState).errors.includes(
+    "Project activation local state does not match current snapshot"
+  ));
+
+  const fakeA2Receipt = validEvidence();
+  fakeA2Receipt.attempts[1].evidenceRef = ".sixthstreet-state/does-not-exist.json; commit head-1";
+  assert.ok(validateEvidence(snapshot, fakeA2Receipt).errors.includes(
+    "attempt a2 A2 evidence is not bound to an existing receipt and current commit"
+  ));
+
+  const staleA2Commit = validEvidence();
+  staleA2Commit.attempts[1].evidenceRef = "tests/fixtures/sixthstreet-state-input.json; commit old-head";
+  assert.ok(validateEvidence(snapshot, staleA2Commit).errors.includes(
+    "attempt a2 A2 evidence is not bound to an existing receipt and current commit"
+  ));
+
+  const arbitrarySheetHashes = validEvidence();
+  arbitrarySheetHashes.writebacks[0].items[0].expectedSha256 = "self-matching";
+  arbitrarySheetHashes.writebacks[0].items[0].rereadSha256 = "self-matching";
+  assert.ok(validateEvidence(snapshot, arbitrarySheetHashes).errors.includes(
+    "Sheet write/reread mismatch: sheet:Sixthstreet Prep!D22"
+  ));
+
+  const missingSheetTarget = validEvidence();
+  missingSheetTarget.writebacks[0].items = missingSheetTarget.writebacks[0].items.slice(1);
+  assert.ok(validateEvidence(snapshot, missingSheetTarget).errors.includes(
+    "Sheet write/reread target missing: sheet:Sixthstreet Prep!D22"
+  ));
+
+  const staleGitHubReceipt = validEvidence();
+  staleGitHubReceipt.writebacks[1].target = "alvinwin/imagination#25";
+  assert.ok(validateEvidence(snapshot, staleGitHubReceipt).errors.includes(
+    "GitHub write/reread receipt does not match the live issue target and body"
+  ));
 });
