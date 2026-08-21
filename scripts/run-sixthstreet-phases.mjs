@@ -74,7 +74,7 @@ export function validateResult(result, phase) {
   if (!result.falsifiers.length) fail(`${phase} must expose at least one falsifier`);
   if (!result.authoritativeInputs.length) fail(`${phase} must cite authoritative inputs`);
   if (!result.evidence.length) fail(`${phase} must cite evidence`);
-  const concreteRef = /(sheet:|github|local git|current\.json|evidence\.json|receipt\.json|project-upload-manifest\.json|Sixth-Street-|state\/|scripts\/|tests\/|package\.json|alvinwin\/imagination#24|[a-f0-9]{40,64})/i;
+  const concreteRef = /(sheet:|github|local git|current\.json|evidence\.json|receipt\.json|project-upload-manifest\.json|\.jsonl#L\d+-L\d+|Sixth-Street-|state\/|scripts\/|tests\/|package\.json|alvinwin\/imagination#24|[a-f0-9]{40,64})/i;
   for (const key of ["authoritativeInputs", "evidence"]) {
     for (const item of result[key]) {
       if (!concreteRef.test(item)) fail(`${phase}.${key} contains an uncited claim: ${item}`);

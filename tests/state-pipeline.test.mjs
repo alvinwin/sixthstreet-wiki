@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -30,6 +30,7 @@ test("generates a source-referenced disposable state packet", () => {
     env: fixtureEnv
   });
   const snapshot = JSON.parse(readFileSync(join(output, "current.json"), "utf8"));
+  const uploadManifest = JSON.parse(readFileSync(join(output, "project-upload-manifest.json"), "utf8"));
 
   assert.equal(snapshot.schemaVersion, 1);
   assert.deepEqual(snapshot.invariants.map(({ id }) => id), ["A1", "A2", "B1"]);
@@ -38,6 +39,11 @@ test("generates a source-referenced disposable state packet", () => {
   assert.ok(snapshot.sources.sheet.cells.every((cell) => cell.ref && cell.sha256));
   assert.ok(snapshot.checks.every((check) => check.status === "pass"));
   assert.equal(snapshot.decision.status, "preserve-unresolved");
+  assert.ok(uploadManifest.sources.every(({ path }) => existsSync(path)));
+  assert.equal(
+    uploadManifest.sources.find(({ name }) => name === "Sixth-Street-source-map-current(2).md").path,
+    resolve(root, "Sixth-Street-source-map-current.md")
+  );
 });
 
 test("rejects fixture bypass outside the test-only environment", () => {
@@ -128,7 +134,7 @@ test("accepts exact machine-readable receipt references in phase evidence", asyn
     residualOwnerDecisions: [],
     nextActions: ["Continue to challenge."],
     terminalGate: "Scoped reconcile gate passed.",
-    evidence: ["evidence.json passes structural validation but remains a claimed bundle."]
+    evidence: ["codex-session /tmp/session.jsonl#L10-L12 is the exact bounded behavior source."]
   };
 
   assert.doesNotThrow(() => validateResult(result, "reconcile"));

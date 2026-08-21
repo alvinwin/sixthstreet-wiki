@@ -438,7 +438,7 @@ def build_snapshot(args: argparse.Namespace) -> int:
         "schemaVersion": 1,
         "runId": run_id,
         "sources": [
-            {**item, "path": str((ROOT / item["name"]).resolve())}
+            {**item, "path": str((ROOT / item["localPath"]).resolve())}
             for item in required_sources
             if item["name"] != "sixthstreet-state-current.md"
         ]
