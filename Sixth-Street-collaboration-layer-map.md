@@ -8,7 +8,7 @@ reference, not another copy of the collaboration contract.
 | --- | --- | --- |
 | ChatGPT system/developer runtime | platform and tool boundary | Read-only; verify behavior, do not shadow it. |
 | ChatGPT Project instructions | fresh-session activator | Thin pointer to the current source map, contract, product principles, and generated state packet. |
-| ChatGPT Project sources | ChatGPT-readable stable producers | Upload current named stable files once; prefer `-current` files. Do not make Project sources a moving-state mirror. |
+| ChatGPT Project sources | ChatGPT-readable stable producers | Resolve current uploads by the Project inventory plus expected content hash. Prefer `-current` files; when the backend reserves a removed filename, record the exact replacement name. Do not make Project sources a moving-state mirror. |
 | Project chats, Project memory, retained outside history | settled-decision and incident evidence | Search and challenge; never treat remembered moving state as current authority. |
 | Codex system/developer runtime | platform and tool boundary | Read-only; test in fresh sessions. |
 | `~/.codex/AGENTS.md` | cross-workspace activator | Keep only genuinely cross-workspace behavior. |

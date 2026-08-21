@@ -251,12 +251,24 @@ operator-visible workflow without giving a script open-ended write authority.
   as the default v0 state engine; it remains conditional for long-running A2
   continuation after subagent expansion is disabled.
 - A generated packet remains transient run input rather than a Project source.
-  The remaining proof gate is a fresh Project-chat activation plus the single
-  end-to-end workflow and three representative A1/A2/B1 attempts.
+  A fresh Project activation on
+  `https://chatgpt.com/g/g-p-6a866274a4a081918e85b7acd675c5af-sixth-street/c/6a87c8b4-081c-83ea-8b37-9df457d9fb58`
+  correctly resolved A1 and preserved the synthetic `Signal room` choice under
+  B1, but it found two live boundary conflicts instead of rubber-stamping the
+  packet. The packet named two removed uploads rather than their `(1)`
+  replacements, and the default GitHub branch still exposed the superseded
+  rule that a ChatGPT taste review could become binding. The filename resolver
+  and local consumer were repaired; the default-branch synchronization remains
+  a terminal blocker until the reviewed branch is integrated.
+- This adversarial result is a useful fail-closed boundary proof, not a green
+  trend attempt. The remaining proof gate is default-branch reconciliation,
+  the single end-to-end workflow, and three representative green A1/A2/B1
+  attempts.
 
 ## ChatGPT corroboration surfaces
 
 - In-Project working exchange: https://chatgpt.com/g/g-p-6a866274a4a081918e85b7acd675c5af-sixth-street/c/6a87b146-c0e4-83ea-8935-8addc45aa556
+- Fresh Project activation/falsification: https://chatgpt.com/g/g-p-6a866274a4a081918e85b7acd675c5af-sixth-street/c/6a87c8b4-081c-83ea-8b37-9df457d9fb58
 - Outside-Project independent analysis: https://chatgpt.com/c/6a87b2a4-36c0-83ea-99b9-74c10bb6adb7
 - Earlier continuity audit: https://chatgpt.com/c/6a8751c9-50cc-83ea-973f-5eba11f09b64
 - Earlier 20x repair discussion: https://chatgpt.com/c/6a87a73a-a340-83ea-be28-f08be06b91b5

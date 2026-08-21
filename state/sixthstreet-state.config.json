@@ -60,12 +60,30 @@
       "projectId": "g-p-6a866274a4a081918e85b7acd675c5af-sixth-street",
       "url": "https://chatgpt.com/g/g-p-6a866274a4a081918e85b7acd675c5af-sixth-street/project",
       "requiredSources": [
-        "Sixth-Street-project-brief-current.md",
-        "Sixth-Street-source-map-current.md",
-        "Sixth-Street-collaboration-contract-current.md",
-        "Sixth-Street-product-principles-current.md",
-        "Sixth-Street-collaboration-layer-map.md",
-        "Sixth-Street-P0-friction-ledger.md"
+        {
+          "path": "Sixth-Street-project-brief-current.md",
+          "projectName": "Sixth-Street-project-brief-current.md"
+        },
+        {
+          "path": "Sixth-Street-source-map-current.md",
+          "projectName": "Sixth-Street-source-map-current(2).md"
+        },
+        {
+          "path": "Sixth-Street-collaboration-contract-current.md",
+          "projectName": "Sixth-Street-collaboration-contract-current.md"
+        },
+        {
+          "path": "Sixth-Street-product-principles-current.md",
+          "projectName": "Sixth-Street-product-principles-current.md"
+        },
+        {
+          "path": "Sixth-Street-collaboration-layer-map.md",
+          "projectName": "Sixth-Street-collaboration-layer-map(2).md"
+        },
+        {
+          "path": "Sixth-Street-P0-friction-ledger.md",
+          "projectName": "Sixth-Street-P0-friction-ledger(2).md"
+        }
       ]
     }
   },

@@ -93,6 +93,8 @@ test("fails deterministic evidence validation when a receipt is missing or stale
       status: "pass",
       chatUrl: "https://chatgpt.com/c/test",
       packetRunId: "run-1",
+      localHead: "head-1",
+      workingTreeSha256: "tree-1",
       instructionsReadback: true,
       stableSources: [{ name: "contract.md", sha256: "abc" }]
     },
@@ -113,5 +115,42 @@ test("fails deterministic evidence validation when a receipt is missing or stale
   assert.deepEqual(validateEvidence(snapshot, evidence), {
     pass: false,
     errors: ["repository-check working tree does not match current snapshot"]
+  });
+});
+
+test("accepts a reread timestamp change only when the Project packet has the same local state", async () => {
+  const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
+  const snapshot = {
+    runId: "run-2",
+    projectDelivery: { requiredSources: [{ name: "contract.md", sha256: "abc" }] },
+    sources: { localGit: { head: "head-1", workingTreeSha256: "tree-1" } }
+  };
+  const evidence = {
+    projectActivation: {
+      status: "pass",
+      chatUrl: "https://chatgpt.com/c/test",
+      packetRunId: "run-1",
+      localHead: "head-1",
+      workingTreeSha256: "tree-1",
+      instructionsReadback: true,
+      stableSources: [{ name: "contract.md", sha256: "abc" }]
+    },
+    attempts: [
+      { id: "a1", invariant: "A1", scenario: "activation", startingCondition: "stale input", observedBehavior: "reconciled", result: "pass", evidenceRef: "chat:a1" },
+      { id: "a2", invariant: "A2", scenario: "continuation", startingCondition: "substep done", observedBehavior: "continued", result: "pass", evidenceRef: "run:a2" },
+      { id: "b1", invariant: "B1", scenario: "pseudo-convergence", startingCondition: "peer agreement", observedBehavior: "preserved owner choice", result: "pass", evidenceRef: "chat:b1" }
+    ],
+    repositoryChecks: { status: "pass", localHead: "head-1", workingTreeSha256: "tree-1" },
+    writebacks: [
+      { surface: "sheet", status: "pass", expectedSha256: "s", rereadSha256: "s" },
+      { surface: "github", status: "pass", expectedSha256: "g", rereadSha256: "g" }
+    ]
+  };
+
+  assert.equal(validateEvidence(snapshot, evidence).pass, true);
+  evidence.projectActivation.workingTreeSha256 = "stale";
+  assert.deepEqual(validateEvidence(snapshot, evidence), {
+    pass: false,
+    errors: ["Project activation packet does not match the current local state"]
   });
 });

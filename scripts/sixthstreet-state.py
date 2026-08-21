@@ -372,10 +372,16 @@ def build_snapshot(args: argparse.Namespace) -> int:
     contract_hash = sha256_file(ROOT / config["contractFile"])
     run_id = f"{generated_at.replace(':', '').replace('-', '')}-{contract_hash[:8]}"
     required_sources = []
-    for name in config["sources"]["chatgptProject"]["requiredSources"]:
-        path = ROOT / name
+    for source in config["sources"]["chatgptProject"]["requiredSources"]:
+        local_name = source["path"] if isinstance(source, dict) else source
+        project_name = source.get("projectName", local_name) if isinstance(source, dict) else source
+        path = ROOT / local_name
         required_sources.append(
-            {"name": name, "sha256": sha256_file(path) if path.exists() else None}
+            {
+                "name": project_name,
+                "localPath": local_name,
+                "sha256": sha256_file(path) if path.exists() else None,
+            }
         )
     snapshot = {
         "schemaVersion": config["schemaVersion"],

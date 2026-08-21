@@ -43,8 +43,13 @@ Inspect local `AGENTS.md` files, Git state, task-owned worktrees, current implem
 - `Sixth-Street-project-brief-current.md` in this ChatGPT Project and the standalone repository.
 - `Sixth-Street-collaboration-contract-current.md` in this ChatGPT Project and the standalone repository.
 - `Sixth-Street-product-principles-current.md` in this ChatGPT Project and the standalone repository; it is a generated compact view of recovered settled principles, not a new product authority.
-- `Sixth-Street-collaboration-layer-map.md` in this ChatGPT Project and the standalone repository.
-- `Sixth-Street-P0-friction-ledger.md` in this ChatGPT Project and the standalone repository.
+- `Sixth-Street-collaboration-layer-map.md` and
+  `Sixth-Street-P0-friction-ledger.md` in the standalone repository.
+- ChatGPT Project uploads may gain a numeric suffix because the Project backend
+  reserves earlier names. Resolve their current Project names from the thin
+  Project instruction and the generated packet, then verify the expected
+  content hashes; do not make this stable source self-reference a moving upload
+  suffix.
 - `/home/alvin/sixthstreet.wiki/AGENTS.md` and `/home/alvin/sixthstreet.wiki/README.md`.
 - `/home/alvin/imagination/apps/sixthstreet-wiki/AGENTS.md`.
 - `/home/alvin/imagination/vault/projects/sixthstreet-wiki/voice-brief.md`.

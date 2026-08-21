@@ -16,7 +16,13 @@ export function validateEvidence(snapshot, evidence) {
   const project = evidence.projectActivation;
   if (project?.status !== "pass") errors.push("fresh Project activation receipt is missing or not pass");
   if (!project?.chatUrl?.startsWith("https://chatgpt.com/")) errors.push("Project activation chat URL is missing");
-  if (project?.packetRunId !== snapshot.runId) errors.push("Project activation packet run does not match current snapshot");
+  const exactPacketRun = project?.packetRunId === snapshot.runId;
+  const samePacketState =
+    project?.localHead === snapshot.sources.localGit.head &&
+    project?.workingTreeSha256 === snapshot.sources.localGit.workingTreeSha256;
+  if (!exactPacketRun && !samePacketState) {
+    errors.push("Project activation packet does not match the current local state");
+  }
   if (project?.instructionsReadback !== true) errors.push("Project instructions readback is not proven");
   const expectedSources = requiredSourceMap(snapshot);
   const observedSources = new Map((project?.stableSources ?? []).map(({ name, sha256 }) => [name, sha256]));
