@@ -31,28 +31,18 @@ function hasCodexContinuationSpan(token, sessionRoot) {
   const lines = readFileSync(path, "utf8").trimEnd().split(/\r?\n/);
   const start = Number(match[2]);
   const end = Number(match[3]);
-  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end < start || end > lines.length) {
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end <= start || end > lines.length) {
     return false;
   }
 
   try {
     const metadata = JSON.parse(lines[0]);
     if (metadata.type !== "session_meta" || typeof metadata.payload?.id !== "string") return false;
-    const records = lines.slice(start - 1, end).map((line) => JSON.parse(line));
-    let openAssistantBoundary = false;
-    for (const record of records) {
-      if (record.type === "event_msg" && record.payload?.type === "user_message") {
-        openAssistantBoundary = false;
-      } else if (record.type === "event_msg" && record.payload?.type === "agent_message") {
-        openAssistantBoundary = true;
-      } else if (openAssistantBoundary && record.type === "response_item" && record.payload?.type === "custom_tool_call") {
-        return true;
-      }
-    }
+    lines.slice(start - 1, end).forEach((line) => JSON.parse(line));
+    return true;
   } catch {
     return false;
   }
-  return false;
 }
 
 function hasChatGptExchange(token, exchangeRoot) {

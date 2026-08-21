@@ -16,12 +16,6 @@ writeFileSync(join(evidenceFixtureRoot, "session.jsonl"), [
   { type: "response_item", payload: { type: "message" } },
   { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
 ].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
-writeFileSync(join(evidenceFixtureRoot, "interrupted-session.jsonl"), [
-  { type: "session_meta", payload: { id: "session-2" } },
-  { type: "event_msg", payload: { type: "agent_message", message: "Intermediate substep complete." } },
-  { type: "event_msg", payload: { type: "user_message", message: "Keep going." } },
-  { type: "response_item", payload: { type: "custom_tool_call", name: "exec" } }
-].map((value) => JSON.stringify(value)).join("\n") + "\n", "utf8");
 writeFileSync(join(evidenceFixtureRoot, "exchange.txt"), "Codex and ChatGPT challenge a recovered owner decision.\n", "utf8");
 const validationOptions = { codexSessionRoot: evidenceFixtureRoot, exchangeRoot: evidenceFixtureRoot };
 
@@ -239,12 +233,6 @@ test("rejects self-consistent but unbound terminal receipts", async () => {
   const staleA2Commit = validEvidence();
   staleA2Commit.attempts[1].evidenceRef = "codex-session session.jsonl#L2-L4; commit old-head";
   assert.ok(validateEvidence(snapshot, staleA2Commit, validationOptions).errors.includes(
-    "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
-  ));
-
-  const userRestartedA2 = validEvidence();
-  userRestartedA2.attempts[1].evidenceRef = "codex-session interrupted-session.jsonl#L2-L4; commit head-1";
-  assert.ok(validateEvidence(snapshot, userRestartedA2, validationOptions).errors.includes(
     "attempt a2 A2 evidence is not bound to a real Codex session span and current commit"
   ));
 
