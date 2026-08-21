@@ -81,6 +81,25 @@ test("builds three fresh-session phase prompts without invoking a model", () => 
   assert.match(prompts["terminal-audit"], /actual A1\/A2\/B1 terminal boundary/);
 });
 
+test("accepts exact machine-readable receipt references in phase evidence", async () => {
+  const { validateResult } = await import("../scripts/run-sixthstreet-phases.mjs");
+  const result = {
+    phase: "reconcile",
+    status: "pass",
+    assumptions: [],
+    missingContext: [],
+    falsifiers: ["A live Sheet reread changes sheet:Sixthstreet Prep!A22:H22."],
+    authoritativeInputs: ["sheet:Sixthstreet Prep!A22:H22"],
+    conflicts: [],
+    residualOwnerDecisions: [],
+    nextActions: ["Continue to challenge."],
+    terminalGate: "Scoped reconcile gate passed.",
+    evidence: ["evidence.json passes structural validation but remains a claimed bundle."]
+  };
+
+  assert.doesNotThrow(() => validateResult(result, "reconcile"));
+});
+
 test("fails deterministic evidence validation when a receipt is missing or stale", async () => {
   const { validateEvidence } = await import("../scripts/sixthstreet-evidence.mjs");
   const snapshot = {

@@ -50,7 +50,7 @@ function run(command, commandArgs, options = {}) {
   return result;
 }
 
-function validateResult(result, phase) {
+export function validateResult(result, phase) {
   if (!result || typeof result !== "object" || Array.isArray(result)) {
     fail(`${phase} did not return an object`);
   }
@@ -73,7 +73,7 @@ function validateResult(result, phase) {
   if (!result.falsifiers.length) fail(`${phase} must expose at least one falsifier`);
   if (!result.authoritativeInputs.length) fail(`${phase} must cite authoritative inputs`);
   if (!result.evidence.length) fail(`${phase} must cite evidence`);
-  const concreteRef = /(sheet:|github|local git|current\.json|receipt\.json|Sixth-Street-|state\/|scripts\/|tests\/|package\.json|alvinwin\/imagination#24|[a-f0-9]{40,64})/i;
+  const concreteRef = /(sheet:|github|local git|current\.json|evidence\.json|receipt\.json|project-upload-manifest\.json|Sixth-Street-|state\/|scripts\/|tests\/|package\.json|alvinwin\/imagination#24|[a-f0-9]{40,64})/i;
   for (const key of ["authoritativeInputs", "evidence"]) {
     for (const item of result[key]) {
       if (!concreteRef.test(item)) fail(`${phase}.${key} contains an uncited claim: ${item}`);
@@ -230,9 +230,10 @@ function compactReceipt(results, snapshot, evidenceGate) {
   };
 }
 
-mkdirSync(outputDir, { recursive: true });
+export function main() {
+  mkdirSync(outputDir, { recursive: true });
 
-if (dryRun) {
+  if (dryRun) {
   const previous = {
     reconcile: resolve(outputDir, "reconcile.json"),
     challenge: resolve(outputDir, "challenge.json")
@@ -242,28 +243,84 @@ if (dryRun) {
   );
   writeFileSync(resolve(outputDir, "prompts.json"), `${JSON.stringify(prompts, null, 2)}\n`, "utf8");
   process.stdout.write(`${JSON.stringify({ dryRun: true, challengeEngine, prompts: resolve(outputDir, "prompts.json") })}\n`);
-  process.exit(0);
+    return;
+  }
+
+  run("python3", [resolve(root, "scripts", "sixthstreet-state.py"), "snapshot", "--strict"]);
+
+  const previous = {};
+  previous.reconcile = runCodexPhase("reconcile", phasePrompt("reconcile", previous));
+  previous.challenge = challengeEngine === "pi"
+    ? runPiChallenge(phasePrompt("challenge", previous))
+    : runCodexPhase("challenge", phasePrompt("challenge", previous));
+  const audit = runCodexPhase("terminal-audit", phasePrompt("terminal-audit", previous));
+
+  const results = Object.fromEntries(
+    Object.entries({ ...previous, "terminal-audit": audit }).map(([phase, path]) => [
+      phase,
+      JSON.parse(readFileSync(path, "utf8"))
+    ])
+  );
+  writeFileSync(resolve(outputDir, "summary.json"), `${JSON.stringify(results, null, 2)}\n`, "utf8");
+  const snapshot = JSON.parse(readFileSync(packetPath, "utf8"));
+  const evidence = existsSync(evidencePath) ? JSON.parse(readFileSync(evidencePath, "utf8")) : {};
+  const evidenceGate = validateEvidence(snapshot, evidence);
+  const receipt = compactReceipt(results, snapshot, evidenceGate);
+  writeFileSync(resolve(root, ".sixthstreet-state", "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+  process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
 }
 
-run("python3", [resolve(root, "scripts", "sixthstreet-state.py"), "snapshot", "--strict"]);
+function failClosedReceipt(error) {
+  const snapshot = existsSync(packetPath) ? JSON.parse(readFileSync(packetPath, "utf8")) : null;
+  const evidence = snapshot && existsSync(evidencePath)
+    ? JSON.parse(readFileSync(evidencePath, "utf8"))
+    : {};
+  const evidenceGate = snapshot
+    ? validateEvidence(snapshot, evidence)
+    : { pass: false, errors: ["state snapshot was not produced"] };
+  const phaseNames = ["reconcile", "challenge", "terminal-audit"];
+  const phases = Object.fromEntries(phaseNames.map((phase) => {
+    const path = resolve(outputDir, `${phase}.json`);
+    if (!existsSync(path)) return [phase, "not-run"];
+    try {
+      return [phase, JSON.parse(readFileSync(path, "utf8")).status || "invalid"];
+    } catch {
+      return [phase, "invalid"];
+    }
+  }));
+  const message = error instanceof Error ? error.message : String(error);
+  return {
+    schemaVersion: 1,
+    runId: snapshot?.runId ?? null,
+    task: snapshot ? {
+      id: snapshot.task.id,
+      title: snapshot.task.title.value,
+      source: snapshot.task.canonicalRef
+    } : null,
+    state: "fail",
+    sources: snapshot ? {
+      sheet: snapshot.sources.sheet.retrieval,
+      github: `${snapshot.sources.github.repo}#${snapshot.sources.github.issue}`,
+      local: `${snapshot.sources.localGit.branch}@${snapshot.sources.localGit.head}`
+    } : {},
+    decision: "none",
+    residualOwnerDecisions: [],
+    terminalGate: `FAIL: workflow validation aborted before a trusted terminal audit: ${message}`,
+    phases,
+    evidenceGate,
+    nextActions: ["Repair the reported validation or execution defect, then rerun the single workflow."]
+  };
+}
 
-const previous = {};
-previous.reconcile = runCodexPhase("reconcile", phasePrompt("reconcile", previous));
-previous.challenge = challengeEngine === "pi"
-  ? runPiChallenge(phasePrompt("challenge", previous))
-  : runCodexPhase("challenge", phasePrompt("challenge", previous));
-const audit = runCodexPhase("terminal-audit", phasePrompt("terminal-audit", previous));
-
-const results = Object.fromEntries(
-  Object.entries({ ...previous, "terminal-audit": audit }).map(([phase, path]) => [
-    phase,
-    JSON.parse(readFileSync(path, "utf8"))
-  ])
-);
-writeFileSync(resolve(outputDir, "summary.json"), `${JSON.stringify(results, null, 2)}\n`, "utf8");
-const snapshot = JSON.parse(readFileSync(packetPath, "utf8"));
-const evidence = existsSync(evidencePath) ? JSON.parse(readFileSync(evidencePath, "utf8")) : {};
-const evidenceGate = validateEvidence(snapshot, evidence);
-const receipt = compactReceipt(results, snapshot, evidenceGate);
-writeFileSync(resolve(root, ".sixthstreet-state", "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`, "utf8");
-process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+if (import.meta.url === `file://${process.argv[1]}`) {
+  try {
+    main();
+  } catch (error) {
+    const receipt = failClosedReceipt(error);
+    mkdirSync(resolve(root, ".sixthstreet-state"), { recursive: true });
+    writeFileSync(resolve(root, ".sixthstreet-state", "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.stderr.write(`${receipt.terminalGate}\n`);
+    process.exitCode = 1;
+  }
+}
