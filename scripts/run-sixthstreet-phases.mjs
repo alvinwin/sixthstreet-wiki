@@ -117,6 +117,13 @@ absence prevents this phase from reaching its own conclusion in missingContext;
 put known later terminal work and receipts in nextActions or evidence. A pass
 must have an empty missingContext array. If any listed missing context blocks
 this phase, return blocked or fail instead of pass.
+
+Use conflicts only for competing claims about the same fact. When current
+authoritative evidence proves a claim false, mark that conflict falsified, not
+unresolved. An unmet terminal condition or required external authorization is
+not by itself an authority conflict: put it in nextActions and, when an owner
+decision is actually required, residualOwnerDecisions. If any conflict really
+remains unresolved, this phase cannot pass.
 `;
   if (phase === "reconcile") {
     return `${shared}
