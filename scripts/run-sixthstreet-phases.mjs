@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import process from "node:process";
 import { validateEvidence } from "./sixthstreet-evidence.mjs";
@@ -16,6 +16,7 @@ const dryRun = args.has("--dry-run");
 const challengeEngine = args.has("--challenge-engine=pi") ? "pi" : "codex";
 const modelArg = process.argv.find((value) => value.startsWith("--model="));
 const model = modelArg?.slice("--model=".length) || "gpt-5.6-sol";
+let activePhase = null;
 
 const requiredKeys = [
   "phase",
@@ -104,6 +105,12 @@ would falsify your current model. Distinguish live Sheet, GitHub, local Git,
 stable source, and historical evidence. Models may reconcile and challenge but
 cannot settle a consequential owner decision by agreement. Do not edit files,
 run writes, or return prose outside the required JSON object.
+
+Every authoritativeInputs and evidence item must contain its own concrete source
+token, such as an exact sheet: reference, GitHub repository/issue/PR, local Git
+head, current.json, evidence.json, receipt.json, or Sixth-Street-* filename. Do
+not put a bare authority conclusion in those arrays without the source that
+supports it.
 
 Status is scoped to this phase, not to the whole task. Put only context whose
 absence prevents this phase from reaching its own conclusion in missingContext;
@@ -231,6 +238,7 @@ function compactReceipt(results, snapshot, evidenceGate) {
 }
 
 export function main() {
+  rmSync(outputDir, { recursive: true, force: true });
   mkdirSync(outputDir, { recursive: true });
 
   if (dryRun) {
@@ -249,11 +257,15 @@ export function main() {
   run("python3", [resolve(root, "scripts", "sixthstreet-state.py"), "snapshot", "--strict"]);
 
   const previous = {};
+  activePhase = "reconcile";
   previous.reconcile = runCodexPhase("reconcile", phasePrompt("reconcile", previous));
+  activePhase = "challenge";
   previous.challenge = challengeEngine === "pi"
     ? runPiChallenge(phasePrompt("challenge", previous))
     : runCodexPhase("challenge", phasePrompt("challenge", previous));
+  activePhase = "terminal-audit";
   const audit = runCodexPhase("terminal-audit", phasePrompt("terminal-audit", previous));
+  activePhase = null;
 
   const results = Object.fromEntries(
     Object.entries({ ...previous, "terminal-audit": audit }).map(([phase, path]) => [
@@ -280,6 +292,7 @@ function failClosedReceipt(error) {
     : { pass: false, errors: ["state snapshot was not produced"] };
   const phaseNames = ["reconcile", "challenge", "terminal-audit"];
   const phases = Object.fromEntries(phaseNames.map((phase) => {
+    if (phase === activePhase) return [phase, "invalid"];
     const path = resolve(outputDir, `${phase}.json`);
     if (!existsSync(path)) return [phase, "not-run"];
     try {

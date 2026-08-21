@@ -77,6 +77,7 @@ test("builds three fresh-session phase prompts without invoking a model", () => 
   assert.match(prompts.reconcile, /Resolve A1/);
   assert.match(prompts.reconcile, /Status is scoped to this phase/);
   assert.match(prompts.reconcile, /A pass\s+must have an empty missingContext array/);
+  assert.match(prompts.reconcile, /Every authoritativeInputs and evidence item must contain its own concrete source\s+token/);
   assert.match(prompts.challenge, /Try to disprove/);
   assert.match(prompts["terminal-audit"], /actual A1\/A2\/B1 terminal boundary/);
 });
