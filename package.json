@@ -7,8 +7,14 @@
     "build": "node scripts/build.mjs",
     "check:budget": "node scripts/check-budget.mjs",
     "serve": "node scripts/serve.mjs",
+    "sixthstreet:run": "node scripts/run-sixthstreet-phases.mjs",
+    "state:render": "python3 scripts/sixthstreet-state.py render",
+    "state:check": "python3 scripts/sixthstreet-state.py snapshot --strict",
+    "state:phases": "node scripts/run-sixthstreet-phases.mjs",
+    "test:collaboration": "node --test tests/collaboration-contract.test.mjs",
+    "test:state": "node --test tests/state-pipeline.test.mjs",
     "test:e2e": "playwright test",
-    "check": "npm run build && npm run check:budget && npm run test:e2e"
+    "check": "npm run build && npm run check:budget && npm run test:collaboration && npm run test:state && npm run test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

@@ -1,0 +1,42 @@
+{
+  "sheet": {
+    "Paths!E3": "Complete the programmatic P0 repair.",
+    "Paths!F3": "Which mechanism proves A1 A2 B1?",
+    "Paths!G3": "ChatGPT, Codex, Pi and live sources.",
+    "Paths!H3": "Run the two P0 contracts and three invariants.",
+    "Paths!I3": "Programmatic PASS at the real boundary.",
+    "Paths!J3": "Product work blocked.",
+    "Paths!K3": "55",
+    "Paths!L3": "The two P0 roots and three invariants use Pi for a bounded executable path.",
+    "Sixthstreet Prep!A22": "P0 collaboration repair + product-system topology",
+    "Sixthstreet Prep!B22": "Programmatic state management.",
+    "Sixthstreet Prep!C22": "Generated state and verified activators.",
+    "Sixthstreet Prep!D22": "Run reconcile, challenge and audit.",
+    "Sixthstreet Prep!E22": "PASS when A1 A2 and B1 hold through write-back.",
+    "Sixthstreet Prep!F22": "P0",
+    "Sixthstreet Prep!G22": "Open",
+    "Sixthstreet Prep!H22": "P0-A task lifecycle has A1 activation and A2 continuation; P0-B decision authority has B1. Pi path is under test.",
+    "20x Experiment!C13": "Programmatic state path.",
+    "20x Experiment!D13": "Two P0 roots and three invariants; Pi is installed.",
+    "20x Experiment!E13": "Tripwire",
+    "20x Experiment!F13": "Issue and Sheet evidence.",
+    "20x Experiment!G13": "",
+    "20x Experiment!H13": "Test one programmatic path."
+  },
+  "github": {
+    "number": 24,
+    "title": "P0: make repeated agent corrections survive and govern the next run",
+    "state": "OPEN",
+    "updatedAt": "2026-08-20T20:00:00Z",
+    "url": "https://github.com/alvinwin/imagination/issues/24",
+    "body": "# P0-A task lifecycle\nA1 authoritative activation. A2 terminal continuation.\n# P0-B decision authority\nB1 non-circular convergence."
+  },
+  "git": {
+    "root": "/home/alvin/sixthstreet.wiki",
+    "branch": "codex/p0-collaboration-repair",
+    "head": "0000000000000000000000000000000000000000",
+    "upstream": "origin/main",
+    "dirty": true,
+    "changes": [" M AGENTS.md"]
+  }
+}
