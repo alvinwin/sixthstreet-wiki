@@ -39,6 +39,14 @@ general-purpose task executor. **Bound:** generated state is a read model, not a
 new product authority, and Alvin is not the operator or architect of the
 synchronization path.
 
+Validate machine-readable identity, freshness, execution, exact writeback, and
+observable A1/A2/B1 behavior. Do not make human-facing Sheet or issue prose pass
+by containing magic labels or matching an explanatory sentence. Treat the
+structured contract as the machine definition and the Sheet/GitHub/local state
+as its live evidence. **Bound:** do not add another invariant, state category,
+receipt type, or validation rule unless a reproduced failure could let A1, A2,
+or B1 pass incorrectly.
+
 Advance the accepted goal through bounded, reversible, extensible increments.
 Prefer an implementation that solves the present problem cleanly and can be
 revised cheaply at the next review gate. Continue routine in-scope work through

@@ -237,7 +237,6 @@ def source_entry(reference: str, value: str) -> dict:
 def build_checks(config: dict, sheet: dict[str, str], github: dict, rendered: str) -> list[dict]:
     contract = (ROOT / config["contractFile"]).read_text(encoding="utf-8")
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
-    sheet_text = "\n".join(sheet.values())
     issue_body = github.get("body", "")
     view = (ROOT / config["productPrinciplesView"]).read_text(encoding="utf-8")
     task_config = config["activeTask"]
@@ -254,15 +253,10 @@ def build_checks(config: dict, sheet: dict[str, str], github: dict, rendered: st
         ("assumption-exposure", "starting assumptions" in contract, "contract requires assumptions and falsifiers"),
         ("agents-activation", "npm run sixthstreet:run" in agents, "repo AGENTS activates the single state entry point"),
         ("product-view-generated", view == rendered, "product principles view matches its JSON producer"),
-        ("sheet-two-contracts", all(token in sheet_text for token in ["P0-A", "A1", "A2", "P0-B", "B1"]), "Sheet names both P0 contracts and all three invariants"),
-        ("sheet-programmatic", "programmatic" in sheet_text and "Pi" in sheet_text, "Sheet records the programmatic state requirement and existing Pi path"),
-        ("issue-two-contracts", "P0-A" in issue_body and "P0-B" in issue_body, "issue ledger has the converged P0 model"),
-        ("issue-not-stale-taxonomy", "Ranked P0 failure classes" not in issue_body and "12 P0" not in issue_body, "issue omits the superseded broad taxonomy"),
         ("task-required-fields", all(task_values.values()), "canonical task row has every required field"),
         ("task-identity", task_config["titleIncludes"] in task_values["A22"], "canonical task title matches configured identity"),
         ("task-priority", task_values["F22"] == task_config["priority"], "canonical task has configured priority"),
         ("task-status", task_values["G22"] == task_config["status"], "canonical task has configured active status"),
-        ("task-terminal-gate", task_values["E22"].startswith("PASS") and "write" in task_values["E22"].lower(), "canonical task has an observable write-aware terminal gate"),
         ("github-identity", github.get("number") == github_config["issue"] and github_config["titleIncludes"] in github.get("title", ""), "GitHub ledger identity matches configuration"),
         ("github-state", github.get("state") == github_config["expectedState"], "GitHub repair ledger is open"),
         ("github-body", bool(issue_body.strip()), "GitHub repair ledger body is nonempty"),

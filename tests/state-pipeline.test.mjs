@@ -65,6 +65,25 @@ test("fails closed on invalid task and GitHub authority states", () => {
   }
 });
 
+test("does not couple live authority to magic strings in explanatory prose", () => {
+  const value = JSON.parse(readFileSync(fixture, "utf8"));
+  value.sheet["Paths!L3"] = "The current repair is blocked at its owner authorization boundary.";
+  value.sheet["Sixthstreet Prep!D22"] = "Integrate the reviewed branch, then exercise the real product-decision boundary.";
+  value.sheet["Sixthstreet Prep!E22"] = "Complete after fresh activation, continued execution, protected owner choice, and verified writeback.";
+  value.sheet["Sixthstreet Prep!H22"] = "The lifecycle and decision-authority repairs remain open.";
+  value.sheet["20x Experiment!D13"] = "The bounded lifecycle gate is under evaluation.";
+  value.github.body = "# Current repair\nThe tracked P0 remains open pending its real terminal boundary.";
+  const directory = mkdtempSync(join(os.tmpdir(), "sixthstreet-state-prose-"));
+  const input = join(directory, "fixture.json");
+  writeFileSync(input, `${JSON.stringify(value)}\n`, "utf8");
+
+  assert.doesNotThrow(() => execFileSync("python3", [stateScript, "snapshot", "--fixture", input, "--output", directory, "--strict"], {
+    cwd: root,
+    env: fixtureEnv,
+    stdio: "pipe"
+  }));
+});
+
 test("builds three fresh-session phase prompts without invoking a model", () => {
   const raw = execFileSync("node", [resolve(root, "scripts", "run-sixthstreet-phases.mjs"), "--dry-run", "--challenge-engine=pi"], {
     cwd: root,
