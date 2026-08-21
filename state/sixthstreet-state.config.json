@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "project": "sixthstreet",
+  "activeTask": {
+    "canonicalRef": "sheet:Sixthstreet Prep!A22:H22",
+    "titleIncludes": "P0 collaboration repair",
+    "priority": "P0",
+    "status": "Open",
+    "requiredCells": ["A22", "B22", "C22", "D22", "E22", "F22", "G22", "H22"]
+  },
+  "contractFile": "Sixth-Street-collaboration-contract-current.md",
+  "productPrinciplesFile": "state/sixthstreet-product-principles.json",
+  "productPrinciplesView": "Sixth-Street-product-principles-current.md",
+  "layerMapFile": "Sixth-Street-collaboration-layer-map.md",
+  "issueLedgerFile": "Sixth-Street-P0-friction-ledger.md",
+  "invariants": [
+    {
+      "id": "A1",
+      "name": "authoritative activation",
+      "requirement": "Resolve the active task, applicable authorities, intended effect surfaces, conflicts, and observable terminal gate before consequential action."
+    },
+    {
+      "id": "A2",
+      "name": "terminal continuation",
+      "requirement": "Continue safe dependency-ordered work through the observable terminal gate and required write-back receipts."
+    },
+    {
+      "id": "B1",
+      "name": "decision authority",
+      "requirement": "Keep a consequential unresolved choice unsettled while ChatGPT and Codex expose assumptions and challenge each other; only recovered settled owner evidence or a new Alvin decision can settle it."
+    }
+  ],
+  "sources": {
+    "sheet": {
+      "spreadsheetId": "1XJfrwX1jaU-x3H3hp9fS1mYtiOS8GdYqrX-bR0JH5H4",
+      "rcloneRemote": "gdrive:",
+      "cells": {
+        "paths": {
+          "sheet": "Paths",
+          "addresses": ["E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3"]
+        },
+        "activeTask": {
+          "sheet": "Sixthstreet Prep",
+          "addresses": ["A22", "B22", "C22", "D22", "E22", "F22", "G22", "H22"]
+        },
+        "experiment": {
+          "sheet": "20x Experiment",
+          "addresses": ["C13", "D13", "E13", "F13", "G13", "H13"]
+        }
+      }
+    },
+    "github": {
+      "repo": "alvinwin/imagination",
+      "issue": 24,
+      "expectedState": "OPEN",
+      "titleIncludes": "P0: make repeated agent corrections survive",
+      "url": "https://github.com/alvinwin/imagination/issues/24"
+    },
+    "chatgptProject": {
+      "projectId": "g-p-6a866274a4a081918e85b7acd675c5af-sixth-street",
+      "url": "https://chatgpt.com/g/g-p-6a866274a4a081918e85b7acd675c5af-sixth-street/project",
+      "requiredSources": [
+        "Sixth-Street-project-brief-current.md",
+        "Sixth-Street-source-map-current.md",
+        "Sixth-Street-collaboration-contract-current.md",
+        "Sixth-Street-product-principles-current.md",
+        "Sixth-Street-collaboration-layer-map.md",
+        "Sixth-Street-P0-friction-ledger.md"
+      ]
+    }
+  },
+  "phases": [
+    {
+      "id": "reconcile",
+      "purpose": "Resolve A1 from the current packet and primary sources; expose conflicts instead of selecting a convenient mirror."
+    },
+    {
+      "id": "challenge",
+      "purpose": "Independently falsify the reconciled model, expose assumptions and missing product context, and preserve unresolved B1 choices."
+    },
+    {
+      "id": "terminal-audit",
+      "purpose": "Verify the real terminal gate, required write-back receipts, and A1/A2/B1 behavior after the final change."
+    }
+  ]
+}

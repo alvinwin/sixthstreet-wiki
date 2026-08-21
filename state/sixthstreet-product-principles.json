@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "title": "Sixth Street product principles",
+  "settled": [
+    {
+      "id": "decision-first",
+      "principle": "Solve a concrete recurring Zenless Zone Zero player decision faster and more clearly than a generic encyclopedia page.",
+      "evidence": [
+        "AI Project Runway: Sixthstreet Prep!A2:H4",
+        "/home/alvin/imagination/apps/sixthstreet-wiki/README.md"
+      ]
+    },
+    {
+      "id": "hierarchy-follows-player-job",
+      "principle": "Lead with the decision-bearing matchup, operation, or next action; provenance and raw detail support that decision instead of dominating it.",
+      "evidence": [
+        "AI Project Runway: Sixthstreet Prep!A3:H4",
+        "GPT Pro DA product review recorded in Sixthstreet Prep"
+      ]
+    },
+    {
+      "id": "evidence-strength",
+      "principle": "Preserve source strength, provenance, freshness, cohort, and uncertainty; fail closed instead of converting observation into recommendation or unsupported mechanics.",
+      "evidence": [
+        "Sixth-Street-collaboration-contract-current.md",
+        "AI Project Runway: Bagel Spec!A8:H20",
+        "/home/alvin/imagination/vault/projects/sixthstreet-wiki/voice-brief.md"
+      ]
+    },
+    {
+      "id": "actual-zzz-language",
+      "principle": "Use actual ZZZ and New Eridu vocabulary plus plain player actions; let utility and a coherent visual system carry the worldbuilding.",
+      "evidence": [
+        "/home/alvin/imagination/vault/projects/sixthstreet-wiki/voice-brief.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "mobile-parity",
+      "principle": "A player can complete the same core decision at 360px; only secondary detail may progressively disclose.",
+      "evidence": [
+        "AGENTS.md",
+        "AI Project Runway: Bagel Spec!A19:H19",
+        "/home/alvin/imagination/apps/sixthstreet-wiki/AGENTS.md"
+      ]
+    },
+    {
+      "id": "coherent-physical-system",
+      "principle": "Use a dense, tactile, non-SaaS information system whose color and hierarchy encode stable meaning; mode differences reflect actual rules rather than decoration.",
+      "evidence": [
+        "AI Project Runway: Sixthstreet Prep information architecture and DA review rows",
+        "/home/alvin/imagination/vault/projects/sixthstreet-wiki/voice-brief.md"
+      ]
+    },
+    {
+      "id": "prove-wedge-before-platform",
+      "principle": "Prove one bounded decision job before adding account import, OCR, generalized planning, or persistent-profile infrastructure.",
+      "evidence": [
+        "AI Project Runway: Sixthstreet Prep first wedge and import/OCR rows",
+        "AI Project Runway: Bagel Spec!A20:H20"
+      ]
+    }
+  ],
+  "provisionalOrLocal": [
+    "An operations-briefing metaphor may fit a particular accepted surface, but it is not a universal Sixth Street product law.",
+    "Random Play may be a visual or memory anchor without becoming the literal narrator of every product surface.",
+    "Exact hero compositions, headlines, labels, and palette choices remain local product decisions unless separately converged."
+  ],
+  "rejectedCalibration": [
+    "Generic cyberpunk, SaaS-dashboard, glassmorphism, or empty marketing-page treatments.",
+    "Invented game-like verbs or mechanics used only for flavor, including describing Deadly Assault or Shiyu Defense as queueing.",
+    "Usage or observed-clear data presented as a recommendation without evidence that supports recommendation authority."
+  ]
+}
